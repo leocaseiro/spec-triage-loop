@@ -22,7 +22,7 @@ loop on itself.
 ## 2. What ships
 
 ```
-leocaseiro/claude-workflow/              git repo = its own marketplace
+leocaseiro/spec-triage-loop/              git repo = its own marketplace
 ├── .claude-plugin/
 │   ├── plugin.json                      name, version, repository
 │   └── marketplace.json                 plugins: [{ source: "./" }]
@@ -42,7 +42,7 @@ leocaseiro/claude-workflow/              git repo = its own marketplace
 └── AGENTS.md                            docs convention + public-repo rule
 ```
 
-Install anywhere: `/plugin marketplace add leocaseiro/claude-workflow` →
+Install anywhere: `/plugin marketplace add leocaseiro/spec-triage-loop` →
 `/plugin install …`. User scope = available in every project, no per-project setup.
 
 ---
