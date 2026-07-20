@@ -51,3 +51,11 @@ before calling the project done.
   superpowers' existing Model Selection" — pin the mechanism at plan time.)
 - Loop-termination when only P2/P3 are applied but findings remain — pin the exact
   predicate (leans on the lap cap + manual override for now).
+
+## Deferred during build (2026-07-20)
+
+- **Cross-platform hook wrapper.** v1's `hooks/hooks.json` calls `hooks/session-start`
+  directly (Unix-only). superpowers ships a polyglot `hooks/run-hook.cmd` so the same hook
+  also runs on Windows (Git-Bash). Deferred per Simplicity-First — v1 is a macOS-only,
+  prove-the-core release. Wire it in before advertising Windows support; pattern to copy:
+  `superpowers/6.1.1/hooks/run-hook.cmd` + set `"command"` to `"…/run-hook.cmd session-start"`.

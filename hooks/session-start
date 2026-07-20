@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+cat <<'RULE'
+[spec-triage-loop] Default review workflow is active.
+- When you ask the person a question, use the triage discipline: establish findings/context
+  in prose chunks FIRST, then emit the AskUserQuestion picker in the SAME turn (never a prose
+  "answer 1-4"); batch <=4; always offer a defer option; no ghost references.
+- Before a PR, review docs with the doc-review-loop skill and code with the code-review-loop
+  skill; loop until clean. Load those skills for the full procedure.
+RULE
