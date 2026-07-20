@@ -53,14 +53,18 @@ person answers each independently. Never collapse several decisions into one que
 
 ## 4. The decision options — Apply / Defer / Drop
 
-- **Apply** = do it now. **Defer** = park it and revisit later. **Drop** = explicitly discard it.
-- **Auto-resolve rest** = trust the recommendations for the remaining items — an escape hatch
+- **Apply** — do it now.
+- **Defer** — not now. The item stays open; come back to it later (a later round, or later in
+  the same session). It is neither decided nor discarded.
+- **Drop** — explicitly discard it (a chosen "no").
+- **Auto-resolve rest** — trust the recommendations for the remaining items; an escape hatch
   when the person wants to skip ahead.
-- **The Skip button is Defer, never Drop.** When the person presses the picker's Skip button
-  the harness records `[No preference]` — that means **"not ready to answer,"** so treat it as
-  **Defer** (park). It is never a silent Drop, never "you choose," and never a cue to re-ask in
-  a loop. Do the parts that do not depend on it, then say plainly what is parked and what it
-  blocks. If the person wants you to choose, they will say so explicitly.
+
+**Skip and Defer are the same gesture.** The Skip button (records `[No preference]`) means
+Defer: not now, revisit later — never Drop, never "you choose." An unanswered question simply
+stays open until the person answers it. Don't loop-pester a deferred question, but do bring it
+back in a later round or when it becomes relevant. Do the parts that don't depend on it, and
+say plainly what is still open.
 
 ## 5. The `[Q-add]` catcher — inert, approves nothing
 
@@ -182,6 +186,6 @@ in the review loop (`../_shared/review-loop.md`).
 | "I'll just list the options in prose." | A decision is a picker, not a prose "answer 1-4". |
 | "I'll bundle these three approvals into one question." | Separate sub-questions — never bundle. |
 | "(see 📖 F-9)" — but F-9 isn't written yet | Ghost reference. Write the chunk first, or drop the ref. |
-| "They pressed Skip, so I'll pick / drop it." | Skip = Defer (not ready). Park it; never drop or choose. |
+| "They pressed Skip, so I'll pick / drop it." | Skip = Defer: not now, revisit later. Never drop or choose. |
 | "Nothing else — go ahead (and do the work)." | The catcher approves nothing. Put scope in its own question. |
 | "I'll record a private detail for context." | Never. Generic, neutral, zero personal data. |
