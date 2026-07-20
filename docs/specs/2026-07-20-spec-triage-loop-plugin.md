@@ -1,8 +1,8 @@
-# claude-workflow plugin — design
+# spec-triage-loop plugin — design
 
 **Status:** draft (brainstorm output, awaiting review)
 **Date:** 2026-07-20
-**Repo:** `leocaseiro/claude-workflow` (public, local-only until pushed)
+**Repo:** `leocaseiro/spec-triage-loop` (public, local-only until pushed)
 
 ---
 

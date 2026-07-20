@@ -1,4 +1,4 @@
-# AGENTS.md — claude-workflow
+# AGENTS.md — spec-triage-loop
 
 ## Docs convention
 
