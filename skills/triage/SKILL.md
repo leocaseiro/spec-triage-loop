@@ -101,13 +101,24 @@ say plainly what is still open.
 
 ## 7. Comparing competing alternatives (A vs B vs C)
 
-Trigger this whenever the person must choose between alternatives, or says **"compare"**.
-Present it in *layers*, never a bare grid:
+Trigger this whenever the person must choose between alternatives, or says **"compare"**. This
+is *not* an approve/reject-one-change decision — its whole purpose is to lay out the **pros and
+cons of each option** so the person can decide. Present it in *layers*, never a bare grid:
 
-1. **Depth per option** — prose pros / cons (plus What / Why / Cost / POC where it helps).
-   Don't strip the reasoning down to only a table.
-2. **A weighted decision matrix** — options × named criteria, each cell scored 1–5, multiplied
-   by the criterion weight, summed, and ranked:
+1. **Depth per option** — prose **pros / cons** for each alternative (plus What / Why / Cost /
+   POC where it helps). This is the core; never strip the reasoning down to only a table.
+2. **An at-a-glance comparison table** — the scannable summary of that depth:
+
+   ```text
+   | Option      | Pros                  | Cons                  | Best when         |
+   |-------------|-----------------------|-----------------------|-------------------|
+   | 1️⃣ Option A | fast, no new deps     | weaker types          | shipping today    |
+   | 2️⃣ Option B | type-safe, composable | more setup            | a long-lived API  |
+   | 3️⃣ Option C | simplest to read      | doesn't scale past N  | a throwaway spike |
+   ```
+
+3. **A weighted decision matrix** *(optional — the score on top)* — options × named criteria,
+   each cell scored 1–5, multiplied by the criterion weight, summed, and ranked:
 
    ```text
    | Criterion (weight)    | 1️⃣ Option A | 2️⃣ Option B | 3️⃣ Option C |
@@ -119,12 +130,12 @@ Present it in *layers*, never a bare grid:
    ```
 
    State the criteria and weights explicitly so the score is auditable, not a black box.
-3. **The decisive trade-off** — one line naming the axis the choice turns on.
-4. **A recommendation + flip condition** — *"Recommend 2️⃣ because …; flip to 1️⃣ if …"* — or,
+4. **The decisive trade-off** — one line naming the axis the choice turns on.
+5. **A recommendation + flip condition** — *"Recommend 2️⃣ because …; flip to 1️⃣ if …"* — or,
    if it is a genuine toss-up, say so rather than fake a pick. Mark the pick `(Recommended)` in
    the lean picker.
 
-The matrix and table never replace the depth — they are the scannable summary on top of it.
+The tables never replace the depth — they are the scannable summary on top of the pros/cons.
 
 ## 8. Findings walk-through (reviews)
 
