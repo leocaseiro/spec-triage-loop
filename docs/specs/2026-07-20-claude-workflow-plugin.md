@@ -34,6 +34,7 @@ leocaseiro/claude-workflow/              git repo = its own marketplace
 │   ├── doc-review-loop/SKILL.md         review any doc until clean
 │   ├── code-review-loop/SKILL.md        review any diff until clean (model-tiered execute)
 │   ├── before-pr/SKILL.md               sequences the 15 steps
+│   ├── handoff/SKILL.md                  save a loop-aware handoff to resume in a new session
 │   └── _shared/review-loop.md           the loop shape, written ONCE (read-only at runtime)
 ├── bin/
 │   └── resolve-skill                    active-version resolver (jq over installed_plugins.json)
@@ -46,9 +47,9 @@ Install anywhere: `/plugin marketplace add leocaseiro/claude-workflow` →
 
 ---
 
-## 3. The four skills
+## 3. The five skills
 
-### `triage` — how any question reaches the person
+### `triage` — how every question is put to the person
 Not review-specific. Governs **every** question the agent asks:
 - Findings/context established in prose chunks FIRST.
 - The picker (`AskUserQuestion`) emitted in the SAME turn — never a prose "answer 1-4".
@@ -73,6 +74,15 @@ Runs the 15-step runbook: `brainstorming → doc-review-loop → writing-plans �
 doc-review-loop → code-review-loop → pr-checklist-audit → human review → merge`.
 The model-tiered execute (§6) is `code-review-loop`'s own "produce" phase (§4),
 not a separate step before it.
+
+### `handoff` — resume in a new session
+A `before-pr` run spans too much context for one session. At any step, `handoff`
+writes a resume document so a fresh session continues exactly where this one
+stopped. Adapted from the base-skill `handoff` pattern, made loop-aware: it
+records the current `stage:`, the active artifact path, any `docs/decisions/pending/`
+fragments, the lap count, and the next runbook step. A new session reads it and
+resumes without re-deriving state. Invoke when ending a session, context-switching,
+or when context runs long mid-loop.
 
 ---
 
