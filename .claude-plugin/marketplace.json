@@ -1,0 +1,8 @@
+{
+  "name": "spec-triage-loop",
+  "description": "Self-hosted marketplace for the spec-triage-loop plugin.",
+  "owner": { "name": "leocaseiro" },
+  "plugins": [
+    { "name": "spec-triage-loop", "version": "0.1.0", "source": "./" }
+  ]
+}
