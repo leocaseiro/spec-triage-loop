@@ -3,7 +3,9 @@
 The calling skill supplies four parameters: REVIEW-SKILL, REVIEW-MODE,
 EXIT-SIGNAL, VERIFY-CHECK. Run this procedure.
 
-1. **Produce/hold** the artifact under review (a doc, or a diff).
+1. **Produce/hold** the artifact under review as a **committed, green checkpoint** (a doc, or
+   a committed diff). Commit before you review: review runs on the committed diff, never the
+   uncommitted working tree, so every lap has a durable, revertable baseline.
 2. **Review** — invoke REVIEW-SKILL in REVIEW-MODE (report-only). Collect its findings.
 3. **Verify** — apply VERIFY-CHECK to each finding before showing it to the person.
    Drop findings that fail verification; note why.
