@@ -70,8 +70,9 @@ exit = CE's own `verdict` / `actionable_findings`.
 
 ### `before-pr` — the sequencer
 Runs the 15-step runbook: `brainstorming → doc-review-loop → writing-plans →
-doc-review-loop → [model-tiered execute] → code-review-loop → pr-checklist-audit
-→ human review → merge`.
+doc-review-loop → code-review-loop → pr-checklist-audit → human review → merge`.
+The model-tiered execute (§6) is `code-review-loop`'s own "produce" phase (§4),
+not a separate step before it.
 
 ---
 
