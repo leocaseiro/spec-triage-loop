@@ -41,7 +41,9 @@ person answers each independently. Never collapse several decisions into one que
 ## 3. The picker's shape
 
 - **Tag every question** with a stable `[Q-X.Y]` prefix so the person can reply `[R: Q-X.Y]`.
-- **Include a "Defer" option** whenever there is room (≤ 3 substantive options + Defer = 4).
+- **Always offer a "Skip — decide later" option** (the defer disposition) when there is room
+  (≤ 3 substantive options + it = 4) — so the person never has to reach for the harness Skip
+  button, whose `[No preference]` record reads ambiguously.
 - **Keep the lead-in short** (~10 lines) — some clients push preceding text into a cramped,
   scrollable region above the picker.
 - **Option-label glyphs:** prefer keycap numbers (1️⃣ 2️⃣ 3️⃣ 4️⃣). Avoid filled enclosed
@@ -51,20 +53,25 @@ person answers each independently. Never collapse several decisions into one que
 - **Expand acronyms** on first use in the response AND inside every question's text — the
   cramped picker strips the surrounding context that would otherwise explain them.
 
-## 4. The decision options — Apply / Defer / Drop
+## 4. The decision options — Apply / Skip—decide-later / Drop
 
 - **Apply** — do it now.
-- **Defer** — not now. The item stays open; come back to it later (a later round, or later in
-  the same session). It is neither decided nor discarded.
+- **Skip — decide later** — not now. The item stays open; come back to it later (a later round,
+  or later in the same session). It is neither decided nor discarded. (This is the "defer"
+  disposition; label the picker option with this exact wording so the transcript records the
+  intent — not a bare "Skip".)
 - **Drop** — explicitly discard it (a chosen "no").
 - **Auto-resolve rest** — trust the recommendations for the remaining items; an escape hatch
   when the person wants to skip ahead.
 
-**Skip and Defer are the same gesture.** The Skip button (records `[No preference]`) means
-Defer: not now, revisit later — never Drop, never "you choose." An unanswered question simply
-stays open until the person answers it. Don't loop-pester a deferred question, but do bring it
-back in a later round or when it becomes relevant. Do the parts that don't depend on it, and
-say plainly what is still open.
+**The Skip button means "Skip — decide later," NEVER "you pick."** When the person presses the
+picker's Skip button, the harness records the literal `[No preference]` — a *misleading* string:
+it does **not** mean "no preference, you choose." It means **decide later** (the option above).
+So on `[No preference]`: never choose for the person, never Apply, never Drop — leave the item
+open, do the parts that don't depend on it, and say plainly what is still open. Don't
+loop-pester it, but do bring it back in a later round or when it becomes relevant. To remove the
+ambiguity entirely, always offer the explicit **Skip — decide later** option so the person
+records the intent directly.
 
 ## 5. The `[Q-add]` catcher — inert, approves nothing
 
@@ -144,8 +151,8 @@ The tables never replace the depth — they are the scannable summary on top of 
   resolves it).
 - **Establish all findings as chunks FIRST** (prose), then walk them in batched lean questions
   (≤ 4 per call), each referencing its chunk, with a consistent option set across the batch
-  (`Apply / Defer / Drop / Auto-resolve rest`). Each finding is explained once; each question
-  stays under ~150 characters.
+  (`Apply / Skip—decide-later / Drop / Auto-resolve rest`). Each finding is explained once; each
+  question stays under ~150 characters.
 
 ## 9. Send the picker in the SAME turn — never strand it
 
@@ -197,6 +204,6 @@ in the review loop (`../_shared/review-loop.md`).
 | "I'll just list the options in prose." | A decision is a picker, not a prose "answer 1-4". |
 | "I'll bundle these three approvals into one question." | Separate sub-questions — never bundle. |
 | "(see 📖 F-9)" — but F-9 isn't written yet | Ghost reference. Write the chunk first, or drop the ref. |
-| "They pressed Skip, so I'll pick / drop it." | Skip = Defer: not now, revisit later. Never drop or choose. |
+| "They pressed Skip → `[No preference]`, so I'll pick." | Skip = decide later, NOT you-pick. Leave it open; never Apply/Drop/choose. |
 | "Nothing else — go ahead (and do the work)." | The catcher approves nothing. Put scope in its own question. |
 | "I'll record a private detail for context." | Never. Generic, neutral, zero personal data. |
