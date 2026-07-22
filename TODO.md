@@ -3,6 +3,17 @@
 Nothing here is dropped — it is deferred, on purpose, with the reason. Revisit
 before calling the project done.
 
+## Resume here (2026-07-21)
+
+**Active thread — triage §7 comparing-alternatives fix (agreed, not yet applied).**
+`skills/triage/SKILL.md` §7 currently shows the weighted decision matrix but dropped the
+prose **pros/cons per option** and the `Option | Pros | Cons | Best-when` at-a-glance table.
+Restore both — the matrix is an *addition* on top of the pros/cons, not a replacement — so §7
+matches the four layers of the maintainer's asking-discipline rules (§4 "Comparing competing
+alternatives"): (1) depth per option (prose pros/cons + What/Why/Cost/POC), (2) the
+at-a-glance `Option | Pros | Cons | Best-when` table, (2b) the weighted decision matrix (the
+score), (3) the decisive trade-off, (4) recommendation + flip condition.
+
 ## Staged to v1.1 (cut from v1 to prove the core loop first — Q-V1SIZE 2026-07-20)
 
 - **`before-pr` skill** — the 15-step sequencer (brainstorm → … → merge). Deferred
