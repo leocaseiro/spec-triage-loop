@@ -151,8 +151,10 @@ The tables never replace the depth — they are the scannable summary on top of 
 ## 8. Findings walk-through (reviews)
 
 - **Finding format** — one chunk per finding: `📖 F-N` =
-  **What's wrong** (concrete, with a line / section ref, quoting the **Before**) /
-  **Proposed fix** (the specific change, showing the **After** — §9) /
+  **What's wrong** (concrete, with a line / section ref) /
+  **Before → After** (the current text and its exact replacement, *shown* — or a worked
+  example when there is no "before" yet; §9) /
+  **Proposed fix** (the specific change, in words) /
   **Why it works** (why that change resolves it).
 - **Establish all findings as chunks FIRST** (prose), then walk them in batched lean questions
   (≤ 4 per call), each referencing its chunk, with a consistent option set across the batch
@@ -166,12 +168,13 @@ rebuild the result in their head; showing the text they have and the text they w
 it to them. **Every finding and every option carries something shown.** Ambiguity is exactly
 what a snippet removes and prose cannot.
 
-- **The thing already exists** → a **`Before → After`**. The *Before* is the evidence, so it
-  belongs inside **What's wrong**; the *After* is the change, so it belongs inside **Proposed
-  fix**. They are not a fourth block bolted on — they are what makes those two parts concrete.
-- **Nothing exists yet** (a new file, a greenfield option) → a **worked example** instead: what
-  the person would see or type, and what comes back. Same job — *what are we solving, and what
-  does solving it look like.*
+- **The thing already exists** → a **`Before → After`** block **of its own**, between
+  **What's wrong** and **Proposed fix**. Four parts, four jobs: *What's wrong* states it,
+  *Before → After* shows it, *Proposed fix* names the change, *Why it works* explains it. It
+  carries its own label precisely so it cannot be quietly folded away into prose.
+- **Nothing exists yet** (a new file, a greenfield option) → a **worked example** in that same
+  slot: what the person would see or type, and what comes back. Same job — *what are we
+  solving, and what does solving it look like.*
 - **Never** put a finding or an option to the person with neither.
 
 **How to render it** — chosen by what changed. Excerpt the changed lines plus ~1 line of

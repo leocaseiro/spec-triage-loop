@@ -10,9 +10,9 @@ EXIT-SIGNAL, VERIFY-CHECK. Run this procedure.
 3. **Verify** — apply VERIFY-CHECK to each finding before showing it to the person.
    Drop findings that fail verification; note why.
 4. **Triage** — use the `triage` skill: establish surviving findings as prose chunks
-   (What's wrong, quoting the Before / Proposed fix, showing the After / Why it works — every
-   finding shows the change, never only describes it), then one AskUserQuestion picker in the
-   same turn, batched <=4. The person decides Apply / Defer / Skip per finding.
+   (What's wrong / Before → After / Proposed fix / Why it works — every finding *shows* the
+   change, never only describes it), then one AskUserQuestion picker in the same turn,
+   batched <=4. The person decides Apply / Skip — decide later / Drop per finding.
 5. **Apply** the Apply decisions.
 6. **Record state** — write `last_applied` (highest severity applied this lap) and bump
    `lap` in the artifact frontmatter, so a compaction cannot lose the re-lap decision.
