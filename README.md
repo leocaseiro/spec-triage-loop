@@ -21,8 +21,9 @@ It installs at user scope, so it is available in every project with no per-proje
 Three skills plus a session-start hook.
 
 - **`triage`** — the asking discipline. Every decision is put to you as a picker with the
-  context established first, never a prose "answer 1-4". Governs review walk-throughs and any
-  multi-option question.
+  context established first, never a prose "answer 1-4" — and the context is *shown*: each
+  finding and each option carries a `Before → After` or a worked example, never a bare
+  description. Governs review walk-throughs and any multi-option question.
 - **`doc-review-loop`** — review any document (spec, plan, design, RFC) until clean. Wraps
   `compound-engineering:ce-doc-review` in headless mode, verifies each finding, triages it
   with you, applies your decisions, and re-reviews until nothing actionable remains.

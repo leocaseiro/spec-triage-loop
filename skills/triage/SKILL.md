@@ -1,6 +1,6 @@
 ---
 name: triage
-description: Use when asking the person any question that needs a decision — establish findings/context as prose chunks first, then emit an AskUserQuestion picker in the SAME turn. Governs review-finding walk-throughs, comparing alternatives, and any multi-option decision. Not code-specific.
+description: Use when asking the person any question that needs a decision — establish findings/context as prose chunks first, each showing a Before → After or worked example rather than only describing it, then emit an AskUserQuestion picker in the SAME turn. Governs review-finding walk-throughs, comparing alternatives, and any multi-option decision. Not code-specific.
 ---
 
 # Triage — how to put a decision to the person
@@ -102,9 +102,10 @@ records the intent directly.
 - **Long context (paragraphs, code, trade-offs)** → the RESPONSE BODY as small labeled chunks
   (`📖 Chunk A / B`, `📖 F-N`); the picker stays lean and references them by label.
 - **The decision is still a picker** — never an appended prose "answer 1-4" after the chunks.
-- **Per-option rationale** lives in the chunk as **What / Why / Cost**, plus a **code POC
-  snippet** when the option concerns code / types / APIs — the snippet makes trade-offs visible
-  that prose cannot.
+- **Per-option rationale** lives in the chunk as **What / Why / Cost**, and every option
+  carries something **shown** (§9) — a `Before → After` when it changes something that already
+  exists, a POC snippet when it is new code / types / APIs. An option described but never shown
+  is not decidable: the snippet makes trade-offs visible that prose cannot.
 
 ## 7. Comparing competing alternatives (A vs B vs C)
 
@@ -112,8 +113,11 @@ Trigger this whenever the person must choose between alternatives, or says **"co
 is *not* an approve/reject-one-change decision — its whole purpose is to lay out the **pros and
 cons of each option** so the person can decide. Present it in *layers*, never a bare grid:
 
-1. **Depth per option** — prose **pros / cons** for each alternative (plus What / Why / Cost /
-   POC where it helps). This is the core; never strip the reasoning down to only a table.
+1. **Depth per option** — prose **pros / cons** for each alternative, plus **What / Why /
+   Cost** and a **worked example of that option** (§9): the `Before → After` it produces, or a
+   POC snippet of what it looks like. *Every* option gets one — a comparison that only shows the
+   recommended option is not a comparison. This is the core; never strip the reasoning down to
+   only a table.
 2. **An at-a-glance comparison table** — the scannable summary of that depth:
 
    ```text
@@ -124,8 +128,8 @@ cons of each option** so the person can decide. Present it in *layers*, never a 
    | 3️⃣ Option C | simplest to read      | doesn't scale past N  | a throwaway spike |
    ```
 
-3. **A weighted decision matrix** *(optional — the score on top)* — options × named criteria,
-   each cell scored 1–5, multiplied by the criterion weight, summed, and ranked:
+3. **A weighted decision matrix** — the score on top of the pros/cons: options × named
+   criteria, each cell scored 1–5, multiplied by the criterion weight, summed, and ranked:
 
    ```text
    | Criterion (weight)    | 1️⃣ Option A | 2️⃣ Option B | 3️⃣ Option C |
@@ -146,15 +150,61 @@ The tables never replace the depth — they are the scannable summary on top of 
 
 ## 8. Findings walk-through (reviews)
 
-- **Finding format** — one chunk per finding: `📖 F-N` = **What's wrong** (concrete, with a
-  line / section ref) / **Proposed fix** (the specific change) / **Why it works** (why the fix
-  resolves it).
+- **Finding format** — one chunk per finding: `📖 F-N` =
+  **What's wrong** (concrete, with a line / section ref, quoting the **Before**) /
+  **Proposed fix** (the specific change, showing the **After** — §9) /
+  **Why it works** (why that change resolves it).
 - **Establish all findings as chunks FIRST** (prose), then walk them in batched lean questions
   (≤ 4 per call), each referencing its chunk, with a consistent option set across the batch
   (`Apply / Skip—decide-later / Drop / Auto-resolve rest`). Each finding is explained once; each
   question stays under ~150 characters.
 
-## 9. Send the picker in the SAME turn — never strand it
+## 9. Show it — `Before → After`, or a worked example
+
+Describing a change is not showing it. *"Proposed fix: tighten the wording"* makes the person
+rebuild the result in their head; showing the text they have and the text they would get hands
+it to them. **Every finding and every option carries something shown.** Ambiguity is exactly
+what a snippet removes and prose cannot.
+
+- **The thing already exists** → a **`Before → After`**. The *Before* is the evidence, so it
+  belongs inside **What's wrong**; the *After* is the change, so it belongs inside **Proposed
+  fix**. They are not a fourth block bolted on — they are what makes those two parts concrete.
+- **Nothing exists yet** (a new file, a greenfield option) → a **worked example** instead: what
+  the person would see or type, and what comes back. Same job — *what are we solving, and what
+  does solving it look like.*
+- **Never** put a finding or an option to the person with neither.
+
+**How to render it** — chosen by what changed. Excerpt the changed lines plus ~1 line of
+context, never the whole file:
+
+- **Code, config, or a line-level edit** → one `diff` fence; it carries both sides at once:
+
+  ```diff
+  - const timeout = 30
+  + const timeout = Number(env.TIMEOUT ?? 30)
+  ```
+
+- **Prose, copy, or a rewritten block** → two labeled fences, each with its source ref:
+
+  ```text
+  Before (SKILL.md:149):  **Proposed fix** (the specific change)
+  After:                  **Proposed fix** (the specific change, showing the After)
+  ```
+
+- **A one-token change** → inline, no fence: `lap: 3` → `lap: 4`.
+
+**Empty sides are stated, never left blank** — `Before: (absent — no such section today)` for a
+pure addition, `After: (removed)` for a deletion. A blank side reads as an oversight; a labelled
+empty one is information.
+
+**Keep the picker self-sufficient (§10):** put a ≤ 60-character `before → after` in the option's
+own description, so the choice stays decidable once the chunk has scrolled away — e.g.
+*"`Proposed fix` prose → prose + the shown After"*.
+
+**Size guard:** past ~12 lines a side it is a plan, not a fix. Show the representative hunk, say
+how many other sites match, and split the finding if they differ.
+
+## 10. Send the picker in the SAME turn — never strand it
 
 - Write the chunks, then emit the `AskUserQuestion` tool call **in the same turn**. Ending the
   turn after the chunks hands control back and the promised picker never fires — the single
@@ -163,7 +213,7 @@ The tables never replace the depth — they are the scannable summary on top of 
   lead-in is visually hidden on some clients. The chunks add depth, not the essentials.
 - Never split the chunks and the picker across two turns.
 
-## 10. No ghost references
+## 11. No ghost references
 
 - If a question says `(see 📖 F-X)`, the chunk `📖 F-X` MUST exist in the same message or the
   immediately-preceding one.
@@ -173,19 +223,19 @@ The tables never replace the depth — they are the scannable summary on top of 
 - **Self-check:** if you are about to write `(see 📖 X)`, scroll up first — is the chunk
   actually there? If not, write it in the same message before the `AskUserQuestion` call.
 
-## 11. Skills and subagents do not suspend this
+## 12. Skills and subagents do not suspend this
 
 The moment control returns to you after any `Skill` invocation or `Agent` dispatch, the **next
 decision is a picker again** — never a numbered prose "confirm before I …" list. Report-style
 skills and subagents may return prose; that is their output, not your way of asking the person.
 
-## 12. "Other" is a side channel
+## 13. "Other" is a side channel
 
 The person sometimes types new, unrelated context into a picker's **"Other"** box because it
 lands faster than a separate message. Treat "Other" content as **potentially-real content**,
 not merely a custom answer to that one question.
 
-## 13. Confirm before saving memories
+## 14. Confirm before saving memories
 
 Propose any memory write via a picker (or prose) and save only after an explicit yes — never
 persist a fact about the person's preferences silently.
@@ -204,6 +254,8 @@ in the review loop (`../_shared/review-loop.md`).
 | "I'll just list the options in prose." | A decision is a picker, not a prose "answer 1-4". |
 | "I'll bundle these three approvals into one question." | Separate sub-questions — never bundle. |
 | "(see 📖 F-9)" — but F-9 isn't written yet | Ghost reference. Write the chunk first, or drop the ref. |
+| "Proposed fix: tighten the wording." | Describing isn't showing. Attach a `Before → After` (§9). |
+| "I'll show the example for the option I recommend." | Every option gets one, or it is not a comparison (§7). |
 | "They pressed Skip → `[No preference]`, so I'll pick." | Skip = decide later, NOT you-pick. Leave it open; never Apply/Drop/choose. |
 | "Nothing else — go ahead (and do the work)." | The catcher approves nothing. Put scope in its own question. |
 | "I'll record a private detail for context." | Never. Generic, neutral, zero personal data. |
