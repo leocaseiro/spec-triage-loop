@@ -5,6 +5,18 @@ document or diff **until it is clean**. It is a Claude Code plugin that makes
 `review → verify → triage → apply → re-review` the default review workflow — by composing
 existing skills (superpowers + compound-engineering) rather than re-implementing them.
 
+## Requirements
+
+Both loops compose skills from two other plugins. Install them first, or the loops fail on an
+unresolvable skill name the moment they run:
+
+```text
+/plugin install superpowers@claude-plugins-official
+/plugin install compound-engineering@compound-engineering-plugin
+```
+
+`triage` on its own has no dependencies.
+
 ## Install
 
 From any machine with Claude Code:

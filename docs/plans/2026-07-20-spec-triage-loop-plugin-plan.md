@@ -1,3 +1,8 @@
+---
+lap: 1
+last_applied: P0
+---
+
 # spec-triage-loop v1 Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
@@ -6,14 +11,14 @@
 
 **Architecture:** A git repo that is its own plugin marketplace. A thin SessionStart hook injects the triage rule + a loop pointer. Three skills (`triage`, `doc-review-loop`, `code-review-loop`) carry the depth; a shared `_shared/review-loop.md` holds the loop shape once. All composition is via the Skill tool by plugin-qualified name (tier 1). Verified against the source spec at `docs/specs/2026-07-20-spec-triage-loop-plugin.md`.
 
-**Tech Stack:** Markdown (SKILL.md), JSON (plugin/marketplace manifests, hooks.json), POSIX shell (hook script). No compiled code, no test framework — verification is structural validity + install/load/compose smoke checks, using the installed superpowers plugin (`~/.claude/plugins/cache/claude-plugins-official/superpowers/6.1.1/`) as the reference shape.
+**Tech Stack:** Markdown (SKILL.md), JSON (plugin/marketplace manifests, hooks.json), POSIX shell (hook script). No compiled code, no test framework — verification is structural validity + install/load/compose smoke checks, using the installed superpowers plugin as the reference shape. Resolve its version at run time — `SP=$(ls -d ~/.claude/plugins/cache/claude-plugins-official/superpowers/*/ | sort -V | tail -1)` — never pin a version directory: the plugin cache is version-scoped and the old directory is removed on upgrade.
 
 ## Global Constraints
 
 - Repo/plugin name: `spec-triage-loop`; owner `leocaseiro`; public repo. Copied verbatim everywhere.
 - **No personal data** in any committed file (public repo). Describe the person's working style neutrally; never a diagnosis. (spec §3, AGENTS.md)
-- Composition is **tier 1 only** — `Skill(<plugin>:<skill>)` by qualified name. No read-from-disk, no `bin/resolve-skill` (staged to v1.1).
-- `doc-review-loop` → `ce-doc-review` in **`mode:headless`**; exit on the headless `Review complete` envelope with `Proposed fixes` + `Decisions` buckets empty (spec: `ce-doc-review/references/synthesis-and-presentation.md`).
+- **Cross-plugin composition** is tier 1 only — `Skill(<plugin>:<skill>)` by qualified name; no `bin/resolve-skill` version resolution (staged to v1.1). Reading this plugin's *own* sibling files (`../_shared/review-loop.md`) is not composition and is unrestricted — superpowers does the same with `references/codex-tools.md`.
+- `doc-review-loop` → `ce-doc-review` in **`mode:headless`**; exit on the headless `Review complete` envelope carrying **neither** a `Proposed fixes` **nor** a `Decisions` section — ce-doc-review omits any zero-item section, so clean means the headers are absent, not present-and-empty. A present `FYI observations` section does not block exit. (spec: `ce-doc-review/references/synthesis-and-presentation.md`).
 - `code-review-loop` → `ce-code-review` in **`mode:agent`**; exit on `verdict` / `actionable_findings`; configure (never rebuild) superpowers' existing `## Model Selection`.
 - The loop is **bounded**: a lap cap / no-progress halt, and `last_applied` + `lap` persisted to artifact frontmatter (spec §4, §7).
 - `verify` is per-input: `receiving-code-review` on code-loop; a doc-specific check on doc-loop (spec §4).
@@ -27,7 +32,7 @@
 **Files:**
 - Create: `.claude-plugin/plugin.json`
 - Create: `.claude-plugin/marketplace.json`
-- Reference: `~/.claude/plugins/cache/claude-plugins-official/superpowers/6.1.1/.claude-plugin/{plugin,marketplace}.json`
+- Reference: `$SP/.claude-plugin/{plugin,marketplace}.json` (resolve `$SP` per Tech Stack — do not pin a version directory)
 
 **Interfaces:**
 - Produces: an installable plugin named `spec-triage-loop` in a self-hosted marketplace (`source: "./"`), consumed by every later task's install check.
@@ -255,7 +260,7 @@ description: Use to review any document (spec, plan, design, RFC) until clean. C
 ---
 ```
 
-Body must: (1) read `_shared/review-loop.md` and bind params — REVIEW-SKILL = `compound-engineering:ce-doc-review`, REVIEW-MODE = `mode:headless`, EXIT-SIGNAL = the headless `Review complete` envelope with `Proposed fixes` AND `Decisions` buckets empty (cite `synthesis-and-presentation.md`, NOT `walkthrough.md`), VERIFY-CHECK = doc-specific (finding cites a real section, quote is verbatim, fix doesn't contradict another section); (2) invoke `ce-doc-review` as `Skill("compound-engineering:ce-doc-review", "mode:headless <path>")`.
+Body must: (1) read `_shared/review-loop.md` and bind params — REVIEW-SKILL = `compound-engineering:ce-doc-review`, REVIEW-MODE = `mode:headless`, EXIT-SIGNAL = the headless `Review complete` envelope carrying neither a `Proposed fixes` nor a `Decisions` section (zero-item sections are omitted, so clean = headers absent; a present `FYI observations` section does not block exit) (cite `synthesis-and-presentation.md`, NOT `walkthrough.md`), VERIFY-CHECK = doc-specific (finding cites a real section, quote is verbatim, fix doesn't contradict another section); (2) invoke `ce-doc-review` as `Skill("compound-engineering:ce-doc-review", "mode:headless <path>")`.
 
 - [ ] **Step 2: Verify the composition + mode are correct**
 
@@ -335,7 +340,7 @@ git commit -m "feat: code-review-loop — ce-code-review agent mode + superpower
 
 - [ ] **Step 2: Remove any already-tracked `.DS_Store`**
 
-Run: `git rm --cached -r --ignore-unmatch $(git ls-files '*.DS_Store')`
+Run: `git ls-files -z '*.DS_Store' | xargs -0 -r git rm --cached --ignore-unmatch`
 Expected: any tracked `.DS_Store` files are untracked (no-op if none).
 
 - [ ] **Step 3: Write `README.md`** — lead with the SIMPLE story (product-lens advisory)
@@ -358,7 +363,7 @@ git commit -m "chore: public-repo hygiene — README (simple story first), gitig
 
 ## Self-Review
 
-**1. Spec coverage.** Each spec section → a task: §2 What ships → Tasks 1,2,3,4,5,6,7; §3 three skills → Tasks 4,5,6; §4 loop (verify split, bound, re-lap) → Task 3 (`_shared`); §5 composition tier-1 → Tasks 5,6; §6 family rule → informs §3 skill bodies (documented, not code); §7 paths/state frontmatter → Task 3 steps 6/9; §8 staged / §9 open → intentionally NOT implemented (TODO.md). No v1 gap.
+**1. Spec coverage.** Each spec section → a task: §2 What ships → Tasks 1,2,3,4,5,6,7; §3 three skills → Tasks 4,5,6; §4 loop (verify split, bound, re-lap) → Task 3 (`_shared`); §5 composition tier-1 → Tasks 5,6 — **but spec §5's second-machine falsification test is a pre-ship gate that no v1 task covers; it stays a ship blocker in TODO.md**; §6 family rule → no operative role in v1 (all three v1 skills are family-neutral: `triage` is generic, and §6 itself calls reviews family-neutral) — staged to v1.1 alongside the first brainstorm/plan-authoring skill; §7 paths/state frontmatter → Task 3 steps 6/9; §8 staged / §9 open → intentionally NOT implemented (TODO.md). **One v1 gap, named above.**
 
 **2. Placeholder scan.** JSON manifests, hook script, and `_shared/review-loop.md` are given verbatim. The three SKILL.md bodies specify exact frontmatter + an enumerated rule list rather than full prose — acceptable because the skill *is* the deliverable authored during execution, and each rule is concrete and checkable; not "TODO"/"handle edge cases".
 

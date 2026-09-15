@@ -24,6 +24,9 @@ score), (3) the decisive trade-off, (4) recommendation + flip condition.
   Add when a real multi-session run demonstrates the need.
 - **Delta vocabulary** (`## ADDED / MODIFIED / REMOVED Requirements`) as a docs
   convention — a per-lap change record. Nice-to-have, not required for the loop.
+- **§6 family rule** (stay in one skill family for the brainstorm→plan lineage; reviews
+  are family-neutral) — no operative role in v1, since all three v1 skills are
+  family-neutral. Becomes live with the first brainstorm/plan-authoring skill.
 - **Tier 3 (read-from-disk + skip-lists) + `bin/resolve-skill`** — the version
   resolver ships nothing in v1 (no v1 consumer). Reintroduce together with tier 3,
   only when a composed skill provably won't defer.
