@@ -16,7 +16,7 @@ review skill's own auto-commit.
 
 ## The procedure
 
-Read `../_shared/review-loop.md` (the shared loop shape) and run it with these four
+Read `../_shared/review-loop.md` (the shared loop shape) and run it with these five
 parameters bound:
 
 - **REVIEW-SKILL** = `compound-engineering:ce-code-review`
@@ -40,6 +40,9 @@ parameters bound:
   — verify it against codebase reality, ask whether it actually breaks anything, and whether
   the reviewer is missing context — before it is shown to the person. Drop findings that fail;
   note why.
+- **STATE-STORE** = the frontmatter of the plan or spec driving the change. A diff has no
+  frontmatter of its own; when the diff is ad-hoc and no driving document exists, fall back to
+  a run-scoped state file and tell the person where it lives.
 
 ## Produce phase — configure, do not rebuild
 
@@ -58,9 +61,9 @@ superpowers' existing mechanism.
 
 ## Notes
 
-- The re-lap trigger, the on-disk state (`last_applied` + `lap`), and the lap-cap /
-  no-progress bound all live in `../_shared/review-loop.md`. Code carries no frontmatter, so
-  that state rides on the plan / spec driving the change (spec §7).
+- The re-lap trigger, the lap decision, and the lap-cap / no-progress bound all live in
+  `../_shared/review-loop.md`. Code carries no frontmatter of its own, which is why
+  STATE-STORE is bound above rather than assumed (spec §7).
 - Because `mode:agent` never mutates the tree, a re-review always runs against exactly what
   you applied — never against something the reviewer silently changed underneath you.
 - `triage` (step 4 of the shared loop) walks the surviving findings past the person as

@@ -16,7 +16,7 @@ to the person stays `triage`'s job.
 
 ## The procedure
 
-Read `../_shared/review-loop.md` (the shared loop shape) and run it with these four
+Read `../_shared/review-loop.md` (the shared loop shape) and run it with these five
 parameters bound:
 
 - **REVIEW-SKILL** = `compound-engineering:ce-doc-review`
@@ -42,12 +42,14 @@ parameters bound:
   3. its proposed fix does not contradict another section of the same doc.
 
   Drop findings that fail verification; note why they were dropped.
+- **STATE-STORE** = the reviewed document's own YAML frontmatter (`last_applied`, `lap`). The
+  document is the artifact, so its frontmatter is the natural home for the loop's state; if it
+  has none, add it.
 
 ## Notes
 
-- The re-lap trigger, the on-disk state (`last_applied` + `lap` in the doc's frontmatter),
-  and the lap-cap / no-progress bound all live in `../_shared/review-loop.md`. This skill
-  only binds the four doc-specific parameters above.
+- The re-lap trigger, the lap decision, and the lap-cap / no-progress bound all live in
+  `../_shared/review-loop.md`. This skill only binds the five doc-specific parameters above.
 - `triage` (step 4 of the shared loop) is what actually walks the surviving findings past
   the person as chunks-then-picker. Load it if it is not already active.
 - Live composition smoke test: run this loop on this plugin's own `docs/plans/…-plan.md`
