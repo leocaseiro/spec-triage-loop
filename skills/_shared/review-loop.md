@@ -6,7 +6,12 @@ EXIT-SIGNAL, VERIFY-CHECK. Run this procedure.
 1. **Produce/hold** the artifact under review as a **committed, green checkpoint** (a doc, or
    a committed diff). Commit before you review: review runs on the committed diff, never the
    uncommitted working tree, so every lap has a durable, revertable baseline.
-2. **Review** — invoke REVIEW-SKILL in REVIEW-MODE (report-only). Collect its findings.
+2. **Review** — invoke REVIEW-SKILL in REVIEW-MODE. Collect its findings. The doc engine is
+   NOT fully report-only: `ce-doc-review mode:headless` writes its anchor-100 `safe_auto`
+   fixes into the document silently, before you see them.
+2b. **Catch the silent edits** — read the envelope's `Applied N fixes:` list, run VERIFY-CHECK
+   over each against step 1's commit, and carry them into step 4 as already-applied
+   (revertable) items. Fold their severity into step 6's `last_applied`.
 3. **Verify** — apply VERIFY-CHECK to each finding before showing it to the person.
    Drop findings that fail verification; note why.
 4. **Triage** — use the `triage` skill: establish surviving findings as prose chunks
@@ -20,5 +25,6 @@ EXIT-SIGNAL, VERIFY-CHECK. Run this procedure.
    Otherwise go to step 8. (The person may override in either direction.)
 8. **Exit** when EXIT-SIGNAL reports clean.
 9. **Bound** — halt and hand to the person if `lap` reaches the cap (default 5), or if this
-   lap's finding set is not a strict subset of the previous lap's (no progress). Never loop
+   lap did not reduce the count of unresolved P0/P1 findings (no progress). Identify findings
+   across laps by section + title. Lap 1 has no previous set and never trips this. Never loop
    unbounded.

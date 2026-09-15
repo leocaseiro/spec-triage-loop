@@ -25,9 +25,10 @@ parameters bound:
       Skill("compound-engineering:ce-code-review", "mode:agent")
 
   (append a `pr:<n>` or `base:<ref>` scope token after `mode:agent` to target a PR or base;
-  blank reviews the current branch.) **Never call it in default mode:** default mode applies
-  safe fixes and *commits* them when the pre-review tree is clean (its Stage 5c), which
-  bypasses the person's triage decision. `mode:agent` mutates nothing — the caller applies.
+  blank reviews the current branch.) `mode:agent` buys JSON rather than markdown, so
+  EXIT-SIGNAL is parseable — bare mode is already report-only. **Never pass `apply:local`:**
+  that token is ce-code-review's only local-mutation authority (its Stage 5c), and it would
+  bypass the person's triage decision. Without it the reviewer mutates nothing.
 - **EXIT-SIGNAL** = the returned JSON object (one raw JSON value, emitted with no code fence).
   The diff is clean when `verdict` is `"Ready to merge"` **and** `actionable_findings` is
   empty. A `verdict` of `"Ready with fixes"` / `"Not ready"`, or a non-empty
