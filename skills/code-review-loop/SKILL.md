@@ -12,12 +12,16 @@ Run the shared review loop with a code diff as the artifact. The review engine i
 never touches the working tree), so applying stays the person's decision via `triage`, not the
 review skill's own auto-commit.
 
-**Announce at start:** "Using code-review-loop to review <diff> until clean."
+**Announce at start:** "Using code-review-loop to review <diff> until clean." Say which
+half you are running — the review half or the triage half — so the person knows what this
+invocation will and will not do.
 
 ## The procedure
 
 Read `../_shared/review-loop.md` (the shared loop shape) and run it with these five
-parameters bound:
+parameters bound. Apply its **context guardrail** first: every lap is two invocations
+(review half → findings artifact → triage half), and its entry rule decides which half
+this invocation is.
 
 - **REVIEW-SKILL** = `compound-engineering:ce-code-review`
 - **REVIEW-MODE** = `mode:agent` — report-only. Invoke it as:

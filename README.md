@@ -43,6 +43,10 @@ Three skills plus a session-start hook.
   `compound-engineering:ce-code-review` in agent mode (report-only), verifies findings with
   `superpowers:receiving-code-review`, triages, applies, and re-reviews.
 
+Each lap runs as **two invocations** — a review half that writes a findings artifact and
+stops, then a triage half that reads it. Triage is the judgment-heavy step, so it starts on a
+clean context instead of inheriting the review's machinery.
+
 The **hook** re-injects the triage rule and a pointer to the two loops at the start of each
 session (`startup` / `clear` / `compact`), so the workflow is present without you loading it
 by hand.

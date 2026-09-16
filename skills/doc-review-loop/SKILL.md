@@ -12,12 +12,16 @@ Run the shared review loop with a document as the artifact. The review engine is
 interactive routing question and per-finding walk-through never fire — putting the decision
 to the person stays `triage`'s job.
 
-**Announce at start:** "Using doc-review-loop to review <doc> until clean."
+**Announce at start:** "Using doc-review-loop to review <doc> until clean." Say which
+half you are running — the review half or the triage half — so the person knows what this
+invocation will and will not do.
 
 ## The procedure
 
 Read `../_shared/review-loop.md` (the shared loop shape) and run it with these five
-parameters bound:
+parameters bound. Apply its **context guardrail** first: every lap is two invocations
+(review half → findings artifact → triage half), and its entry rule decides which half
+this invocation is.
 
 - **REVIEW-SKILL** = `compound-engineering:ce-doc-review`
 - **REVIEW-MODE** = `mode:headless` — report-only. Invoke it as:
