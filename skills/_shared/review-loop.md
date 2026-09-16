@@ -22,6 +22,26 @@ context gauge, which the model cannot do anyway.
 **Entry rule.** On invocation, look for an untriaged findings artifact for this artifact.
 If one exists, start at **step 4**. Otherwise start at **step 1**.
 
+**Cap the triage half at 8 findings, or 5 picker rounds — whichever comes first.** Then write
+the undecided findings plus the decisions so far back to the artifact and stop, exactly as the
+review half does. A finding that needed more than one picker round counts as two. The cap is a
+ceiling, not a quota: a short list just finishes early.
+
+**In the triage half, read the findings artifact and nothing else.** Never re-open the source
+document to compose a chunk — measured across real sessions, `Read` was 24.5% of all context
+growth at ~17,500 tokens per call. The artifact carries each finding's Before → After inline
+precisely so the triage half never has to.
+
+**State the finding count in the artifact header**, so the cap is checkable at a glance
+instead of by recount.
+
+*Why a count and not a token budget: the model cannot observe its own context. There is no
+gauge, no warning, and no auto-compact event before the ceiling — one sampled session reached
+972,050 tokens without one — and roughly a third of all growth is thinking, which the model
+neither chooses nor sees. A budget it cannot measure is a wish. If the harness ever exposes a
+real gauge (a per-session token count that decreases monotonically, or a compaction warning),
+switch to "hand off at 50% of the window" and demote this count to a backstop.*
+
 **The artifact.** `.spec-triage-loop/<artifact-slug>/lap-<n>/findings.json`, relative to
 the repo root. It must carry everything the triage half needs, because that half will not
 re-read the review: the artifact path, the lap number, REVIEW-SKILL and REVIEW-MODE, every
