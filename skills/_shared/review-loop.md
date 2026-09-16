@@ -67,8 +67,11 @@ go back and finish it before stopping.
    `degraded` (code loop — no `verdict` key), halt immediately and hand the returned `reason`
    to the person. Do not count the lap, do not re-lap, and never read an absent envelope as a
    not-clean result.
-3. **Verify** — apply VERIFY-CHECK to each finding before showing it to the person.
-   Drop findings that fail verification; note why.
+3. **Verify — dispatch it, never inline.** Send the findings to a subagent that applies
+   VERIFY-CHECK against the source and returns, per finding, a pass/fail plus the verbatim
+   *Before* text it confirmed. Do not open the source document in this context: measured on a
+   real lap, a reviewer burned 139,895 tokens of its own context and handed back 248, while an
+   inline `Read` of the source costs ~17,500 every time. Drop findings that fail; record why.
    **Then write the artifact and STOP.** Tell the person the lap is half done, how many
    findings survived verification, and the exact command that resumes it. Do not begin the
    walk-through in this session, however much context appears to be left.

@@ -160,6 +160,11 @@ The tables never replace the depth — they are the scannable summary on top of 
   (≤ 4 per call), each referencing its chunk, with a consistent option set across the batch
   (`Apply / Skip—decide-later / Drop / Auto-resolve rest`). Each finding is explained once; each
   question stays under ~150 characters.
+- **Batch by area; order the batches by severity.** Group findings touching the same file,
+  section or feature into one batch, then run the batches in order of the highest severity each
+  contains. Locality is what makes a batch cheap — that area's context loads once and amortises
+  across its findings instead of reloading per finding. Severity-ordered batches keep the
+  important decisions early, so stopping after any batch still leaves the worst resolved.
 
 ## 9. Show it — `Before → After`, or a worked example
 
