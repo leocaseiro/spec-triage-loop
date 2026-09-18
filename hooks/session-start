@@ -4,6 +4,8 @@ cat <<'RULE'
 - When you ask the person a question, use the triage discipline: establish findings/context
   in prose chunks FIRST, then emit the AskUserQuestion picker in the SAME turn (never a prose
   "answer 1-4"); batch <=4; always offer a defer option; no ghost references.
+- ONE decision = ONE self-contained message: quote the source inline, expand every document
+  id (F-2, Task 10, P1) into what it IS, and NEVER write a file to ask a question.
 - SHOW the change, never only describe it: every finding and every option carries a
   `Before -> After` (diff fence for code, two labeled fences for prose) or, when nothing
   exists yet, a worked example. Alternatives get pros/cons + scores + an example EACH.

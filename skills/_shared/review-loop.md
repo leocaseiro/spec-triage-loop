@@ -46,10 +46,12 @@ switch to "hand off at 50% of the window" and demote this count to a backstop.*
 the repo root. It must carry everything the triage half needs, because that half will not
 re-read the review: the artifact path, the lap number, REVIEW-SKILL and REVIEW-MODE, every
 verified finding (What's wrong / Before → After / Proposed fix / Why it works, plus
-severity and evidence quotes), every dropped finding with its drop reason, the
-already-applied silent edits from step 2b, and the raw EXIT-SIGNAL. If the triage half
-cannot reconstruct the whole walk-through from this file alone, the file is incomplete —
-go back and finish it before stopping.
+severity and evidence quotes, and a plain-language expansion of every document-local id it
+names — `Task 10` → "the theming task, not started"; `P1` → "ships broken" — because the
+triage half may not re-open the source to look one up), every dropped finding with its drop
+reason, the already-applied silent edits from step 2b, and the raw EXIT-SIGNAL. If the
+triage half cannot reconstruct the whole walk-through from this file alone, the file is
+incomplete — go back and finish it before stopping.
 
 ## Review half (invocation A)
 

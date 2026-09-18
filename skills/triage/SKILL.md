@@ -52,6 +52,20 @@ person answers each independently. Never collapse several decisions into one que
   carries it — that is a wall in the cramped UI.
 - **Expand acronyms** on first use in the response AND inside every question's text — the
   cramped picker strips the surrounding context that would otherwise explain them.
+- **Expand document-local identifiers the same way** — finding ids (`F-2`), task numbers
+  (`Task 10`), requirement ids (`R5`), severity codes (`P1`), section refs (`§4.2`). These are
+  worse than acronyms: they mean something only inside a source document the person has not
+  opened and cannot look up from inside the picker. On first use in **any** question or chunk,
+  expand the id into **what it is** — never the bare number.
+
+  ```text
+  ❌ "F-2: Task 4 blocks Task 10 (P1) — apply?"
+  ✅ "F-2 (finding 2 of 7): the plan lists the design-system export task — already shipped —
+      as blocking the theming task, which has not started. P1 = ships broken. Apply?"
+  ```
+
+  A reader who never opened the source must still be able to follow the question. Keep the
+  bare id too — it is the stable handle for `[R: Q-F2]` — but never let it travel alone.
 
 ## 4. The decision options — Apply / Skip—decide-later / Drop
 
@@ -221,29 +235,84 @@ how many other sites match, and split the finding if they differ.
   lead-in is visually hidden on some clients. The chunks add depth, not the essentials.
 - Never split the chunks and the picker across two turns.
 
-## 11. No ghost references
+## 11. One decision, one self-contained message — and never a file
 
-- If a question says `(see 📖 F-X)`, the chunk `📖 F-X` MUST exist in the same message or the
-  immediately-preceding one.
+A decision the person can only answer by assembling it from several places is not a question,
+it is homework. Observed: one decision split four ways — a chunk in an earlier message, a file
+written to disk, the source document, and the picker text — leaving the person to merge the
+four by hand before they could answer at all.
+
+- **Everything needed to decide lives in the ONE message that carries the picker.** Not the
+  previous message, not the source document, not a file, not a scroll-back. If the person has
+  to leave the message to understand the question, the message is incomplete — finish it.
+- **Quote the source text inline; never cite where to find it.** `See plan.md:412` and
+  `as covered in Task 4` are errands, not context. Paste the one or two relevant lines
+  verbatim into the chunk — that is exactly what `Before → After` (§9) and the findings
+  artifact's evidence quotes exist to make cheap.
+- **Never create a file in order to ask a question.** No scratch `context.md`, no
+  `questions.md`, no "I wrote it up, go read it". Put the context in the chat message. A
+  picker overlay that covers the message text is *not* a reason to write a file — it is the
+  reason the picker must be self-sufficient (§10): question and option text carry the
+  essentials, the chunk carries the depth.
+  *(Not this: the loop's `findings.json` handoff between the review and triage halves. That is
+  state you write for yourself across invocations — never an artifact handed to the person.)*
+
+**The shape that works** — per decision, in one message, with the picker in that same turn:
+
+1. **Today** — what the code or doc does right now, with the relevant source text quoted inline.
+2. **Before → After** — the change *shown*: a diff fence, or two labelled fences for prose (§9).
+3. **Pros / cons** — a short table across the options (§7) whenever there is more than one.
+4. **The trade-off** — one line naming the axis the choice actually turns on.
+5. **Recommendation** — the pick, why, and what would flip it.
+
+````text
+📖 F-3 (finding 3 of 6) — the retry helper hides the error it failed on
+
+**Today** — `fetchWithRetry` returns `null` once attempts run out (src/net.ts:41):
+    if (attempt === max) return null
+
+**Before → After**
+```diff
+- if (attempt === max) return null
++ if (attempt === max) throw lastError
+```
+
+| Option           | Pros                       | Cons                          | Best when        |
+|------------------|----------------------------|-------------------------------|------------------|
+| 1️⃣ Throw         | callers see the real cause | 3 call sites need a try/catch | errors matter    |
+| 2️⃣ Return Result | typed failure, no throw    | touches every caller          | a long-lived API |
+
+**Trade-off:** blast radius now (2️⃣ — every caller) vs. a smaller fix that still hides
+nothing (1️⃣ — three call sites).
+**Recommend 1️⃣** — those three call sites already sit inside a try/catch; flip to 2️⃣ if the
+helper becomes public API.
+````
+
+…and in the same turn: `[Q-F3] Retry helper hides the failing error — throw instead? (see 📖 F-3)`
+
+## 12. No ghost references
+
+- If a question says `(see 📖 F-X)`, the chunk `📖 F-X` MUST exist **in the same message** as
+  the question (§11) — never in an earlier one the person has to scroll back for.
 - **❌ Wrong:** referencing a chunk you never wrote — the person has nothing to read, asks for
   context, and you loop re-issuing the same lean question thinking they want format help.
 - **✅ Correct:** the chunk sits in the same message as the question that references it.
-- **Self-check:** if you are about to write `(see 📖 X)`, scroll up first — is the chunk
-  actually there? If not, write it in the same message before the `AskUserQuestion` call.
+- **Self-check:** if you are about to write `(see 📖 X)`, re-read *this* message — is the
+  chunk actually in it? If not, write it here, before the `AskUserQuestion` call.
 
-## 12. Skills and subagents do not suspend this
+## 13. Skills and subagents do not suspend this
 
 The moment control returns to you after any `Skill` invocation or `Agent` dispatch, the **next
 decision is a picker again** — never a numbered prose "confirm before I …" list. Report-style
 skills and subagents may return prose; that is their output, not your way of asking the person.
 
-## 13. "Other" is a side channel
+## 14. "Other" is a side channel
 
 The person sometimes types new, unrelated context into a picker's **"Other"** box because it
 lands faster than a separate message. Treat "Other" content as **potentially-real content**,
 not merely a custom answer to that one question.
 
-## 14. Confirm before saving memories
+## 15. Confirm before saving memories
 
 Propose any memory write via a picker (or prose) and save only after an explicit yes — never
 persist a fact about the person's preferences silently.
@@ -266,4 +335,7 @@ in the review loop (`../_shared/review-loop.md`).
 | "I'll show the example for the option I recommend." | Every option gets one, or it is not a comparison (§7). |
 | "They pressed Skip → `[No preference]`, so I'll pick." | Skip = decide later, NOT you-pick. Leave it open; never Apply/Drop/choose. |
 | "Nothing else — go ahead (and do the work)." | The catcher approves nothing. Put scope in its own question. |
+| "F-2: Task 4 blocks Task 10 (P1) — apply?" | A bare id is not a question. Expand it into what it IS (§3). |
+| "The context is in my earlier message / in the plan doc." | One decision = one message. Quote the source inline (§11). |
+| "The overlay hides the text — I'll write it to a file." | Never a file to ask a question. Chat message + self-sufficient picker (§11). |
 | "I'll record a private detail for context." | Never. Generic, neutral, zero personal data. |
