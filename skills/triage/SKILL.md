@@ -164,7 +164,8 @@ The tables never replace the depth — they are the scannable summary on top of 
 
 ## 8. Findings walk-through (reviews)
 
-- **Finding format** — one chunk per finding: `📖 F-N` =
+- **Finding format** — one chunk per finding, labelled `📖 F-N` (**F** for Finding, **N** its
+  number: `📖 F-3` is finding 3; the question about it is `[Q-F3]`) =
   **What's wrong** (concrete, with a line / section ref) /
   **Before → After** (the current text and its exact replacement, *shown* — or a worked
   example when there is no "before" yet; §9) /
