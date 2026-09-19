@@ -71,4 +71,7 @@ superpowers' existing mechanism.
 - Because `mode:agent` never mutates the tree, a re-review always runs against exactly what
   you applied — never against something the reviewer silently changed underneath you.
 - `triage` (step 4 of the shared loop) walks the surviving findings past the person as
-  chunks-then-picker. Load it if it is not already active.
+  chunks-then-picker. **Load it now** — `Skill("spec-triage-loop:triage")` — before the first
+  picker. The SessionStart hook's summary is NOT the skill: the depth rules (§7 pros/cons,
+  §9 Before → After, the trade-off line, the recommendation) exist only in the skill file, so
+  a loop that skips the load ships options with no reasoning attached.

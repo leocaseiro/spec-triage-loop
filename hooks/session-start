@@ -1,6 +1,9 @@
 #!/usr/bin/env sh
 cat <<'RULE'
 [spec-triage-loop] Default review workflow is active.
+- This summary is a POINTER, not the skill. Before your FIRST AskUserQuestion in a session,
+  run Skill("spec-triage-loop:triage"). The depth rules — pros/cons, Before -> After, the
+  trade-off line, the recommendation — live in the skill file, not in these bullets.
 - When you ask the person a question, use the triage discipline: establish findings/context
   in prose chunks FIRST, then emit the AskUserQuestion picker in the SAME turn (never a prose
   "answer 1-4"); batch <=4; always offer a defer option; no ghost references.

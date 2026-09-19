@@ -55,7 +55,10 @@ this invocation is.
 - The re-lap trigger, the lap decision, and the lap-cap / no-progress bound all live in
   `../_shared/review-loop.md`. This skill only binds the five doc-specific parameters above.
 - `triage` (step 4 of the shared loop) is what actually walks the surviving findings past
-  the person as chunks-then-picker. Load it if it is not already active.
+  the person as chunks-then-picker. **Load it now** — `Skill("spec-triage-loop:triage")` —
+  before the first picker. The SessionStart hook's summary is NOT the skill: the depth rules
+  (§7 pros/cons, §9 Before → After, the trade-off line, the recommendation) exist only in the
+  skill file, so a loop that skips the load ships options with no reasoning attached.
 - Live composition smoke test: run this loop on this plugin's own `docs/plans/…-plan.md`
   after install — that is the intended dogfood and the first real exercise of the headless
   envelope parse.
