@@ -60,6 +60,24 @@ skill only binds its four parameters — which review skill, which mode, the exi
 the verify check. The bound is real: the loop halts at a lap cap, or when a lap makes no
 progress, so "until clean" is never open-ended.
 
+## Measuring whether it lands
+
+`scripts/picker-audit.py` reads Claude Code transcripts and scores every `AskUserQuestion`
+picker: did it carry a `Before → After`, a pros/cons table, a named trade-off, a
+recommendation — and was the `triage` skill loaded in that session at all. Read-only.
+
+```bash
+scripts/picker-audit.py <project>              # per-session table
+scripts/picker-audit.py <project> --by-skill   # loaded vs not loaded
+scripts/picker-audit.py <project> --monthly    # trend over months
+scripts/picker-audit.py <project> --dump 2     # one picker in full
+```
+
+`<project>` is a substring of a directory under `~/.claude/projects`; omit it to scan all.
+It exists because the discipline degrades silently: measured on 2026-09-19 across 89
+pickers, sessions that loaded the skill named the trade-off in 40% of pickers and sessions
+that did not in 4%, with no other visible difference.
+
 ## Depth
 
 - Design + rationale — [`docs/specs/2026-07-20-spec-triage-loop-plugin.md`](docs/specs/2026-07-20-spec-triage-loop-plugin.md)
