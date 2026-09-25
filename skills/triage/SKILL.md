@@ -166,6 +166,7 @@ The tables never replace the depth — they are the scannable summary on top of 
 
 - **Finding format** — one chunk per finding, labelled `📖 F-N` (**F** for Finding, **N** its
   number: `📖 F-3` is finding 3; the question about it is `[Q-F3]`) =
+  **The scenario** (what the person is doing, and what they see go wrong — §10) /
   **What's wrong** (concrete, with a line / section ref) /
   **Before → After** (the current text and its exact replacement, *shown* — or a worked
   example when there is no "before" yet; §9) /
@@ -220,14 +221,55 @@ context, never the whole file:
 pure addition, `After: (removed)` for a deletion. A blank side reads as an oversight; a labelled
 empty one is information.
 
-**Keep the picker self-sufficient (§10):** put a ≤ 60-character `before → after` in the option's
+**Keep the picker self-sufficient (§11):** put a ≤ 60-character `before → after` in the option's
 own description, so the choice stays decidable once the chunk has scrolled away — e.g.
 *"`Proposed fix` prose → prose + the shown After"*.
 
 **Size guard:** past ~12 lines a side it is a plan, not a fix. Show the representative hunk, say
 how many other sites match, and split the finding if they differ.
 
-## 10. Send the picker in the SAME turn — never strand it
+## 10. Ground it — open every finding with the scenario
+
+§9 shows what *changes*. The scenario shows what is *at stake*, and it comes **first**: nobody
+can weigh a fix until they know what goes wrong without it. Write it for a reader who has never
+opened the file, does not know the subsystem, and was not in the review.
+
+**The scenario is a short second-person walk-through of the failure as a human meets it** —
+what they were doing, what they would see, and why that is bad. Not the mechanism and not the
+code; those follow, under their own labels.
+
+- **Second person, present tense, inside the product.** "You open Settings and type `100`…" —
+  not "the handler fires on every keystroke".
+- **Concrete beats general.** A number, a screen, a click. *"You typed three characters and
+  restarted the song three times"* lands where *"causes redundant reloads"* does not.
+- **Name the damage in the person's own terms** — lost work, a wrong number, a silent failure,
+  a test that passes when it should have caught this.
+- **Ground it in a real incident when one exists** — *"this is not hypothetical; it shipped
+  once"* turns a worry into evidence. Never invent one.
+- **No jargon inside the scenario.** If a term is unavoidable, expand it in a *Terms first*
+  line above the findings (§3), never mid-story.
+
+```text
+❌ mechanism-first — only decidable by someone who already knows the subsystem
+   The restore path gates enums and numbers but not text, so an invalid stored font throws
+   in fillFromJson and the reset flag stays false.
+
+✅ scenario-first — the same finding, decidable by anyone
+   **The scenario.** You spend ten minutes setting the app up how you like it — a readable
+   font, a colour you picked, zoom at 120%. Next morning you open it and *everything* is
+   back to factory defaults. No message, no warning. Twenty settings gone, because one of
+   them was saved in a form the engine will not accept.
+```
+
+**Carry it into the options.** The scenario pays off a second time in the `Drop` description:
+say what keeps happening if the person declines — *"Discard it. One bad stored value keeps
+wiping every other setting, silently, on every visit."* That is what keeps the picker decidable
+on its own (§11) once the chunk has scrolled away.
+
+**Where it goes:** first, above *What's wrong*, in every finding chunk (§8) and every decision
+message (§12). A finding with no scenario is a fix nobody can weigh.
+
+## 11. Send the picker in the SAME turn — never strand it
 
 - Write the chunks, then emit the `AskUserQuestion` tool call **in the same turn**. Ending the
   turn after the chunks hands control back and the promised picker never fires — the single
@@ -236,7 +278,7 @@ how many other sites match, and split the finding if they differ.
   lead-in is visually hidden on some clients. The chunks add depth, not the essentials.
 - Never split the chunks and the picker across two turns.
 
-## 11. One decision, one self-contained message — and never a file
+## 12. One decision, one self-contained message — and never a file
 
 A decision the person can only answer by assembling it from several places is not a question,
 it is homework. Observed: one decision split four ways — a chunk in an earlier message, a file
@@ -253,21 +295,26 @@ four by hand before they could answer at all.
 - **Never create a file in order to ask a question.** No scratch `context.md`, no
   `questions.md`, no "I wrote it up, go read it". Put the context in the chat message. A
   picker overlay that covers the message text is *not* a reason to write a file — it is the
-  reason the picker must be self-sufficient (§10): question and option text carry the
+  reason the picker must be self-sufficient (§11): question and option text carry the
   essentials, the chunk carries the depth.
   *(Not this: the loop's `findings.json` handoff between the review and triage halves. That is
   state you write for yourself across invocations — never an artifact handed to the person.)*
 
 **The shape that works** — per decision, in one message, with the picker in that same turn:
 
-1. **Today** — what the code or doc does right now, with the relevant source text quoted inline.
-2. **Before → After** — the change *shown*: a diff fence, or two labelled fences for prose (§9).
-3. **Pros / cons** — a short table across the options (§7) whenever there is more than one.
-4. **The trade-off** — one line naming the axis the choice actually turns on.
-5. **Recommendation** — the pick, why, and what would flip it.
+1. **The scenario** — what goes wrong for the person, in their terms, before any mechanism (§10).
+2. **Today** — what the code or doc does right now, with the relevant source text quoted inline.
+3. **Before → After** — the change *shown*: a diff fence, or two labelled fences for prose (§9).
+4. **Pros / cons** — a short table across the options (§7) whenever there is more than one.
+5. **The trade-off** — one line naming the axis the choice actually turns on.
+6. **Recommendation** — the pick, why, and what would flip it.
 
 ````text
 📖 F-3 (finding 3 of 6) — the retry helper hides the error it failed on
+
+**The scenario.** A user reports "it just says it failed". You open the logs to find out why
+the upload died — and there is nothing: no host, no status, no timeout. The one call that knew
+what went wrong threw it away, so every failure in this path looks identical.
 
 **Today** — `fetchWithRetry` returns `null` once attempts run out (src/net.ts:41):
     if (attempt === max) return null
@@ -291,29 +338,29 @@ helper becomes public API.
 
 …and in the same turn: `[Q-F3] Retry helper hides the failing error — throw instead? (see 📖 F-3)`
 
-## 12. No ghost references
+## 13. No ghost references
 
 - If a question says `(see 📖 F-X)`, the chunk `📖 F-X` MUST exist **in the same message** as
-  the question (§11) — never in an earlier one the person has to scroll back for.
+  the question (§12) — never in an earlier one the person has to scroll back for.
 - **❌ Wrong:** referencing a chunk you never wrote — the person has nothing to read, asks for
   context, and you loop re-issuing the same lean question thinking they want format help.
 - **✅ Correct:** the chunk sits in the same message as the question that references it.
 - **Self-check:** if you are about to write `(see 📖 X)`, re-read *this* message — is the
   chunk actually in it? If not, write it here, before the `AskUserQuestion` call.
 
-## 13. Skills and subagents do not suspend this
+## 14. Skills and subagents do not suspend this
 
 The moment control returns to you after any `Skill` invocation or `Agent` dispatch, the **next
 decision is a picker again** — never a numbered prose "confirm before I …" list. Report-style
 skills and subagents may return prose; that is their output, not your way of asking the person.
 
-## 14. "Other" is a side channel
+## 15. "Other" is a side channel
 
 The person sometimes types new, unrelated context into a picker's **"Other"** box because it
 lands faster than a separate message. Treat "Other" content as **potentially-real content**,
 not merely a custom answer to that one question.
 
-## 15. Confirm before saving memories
+## 16. Confirm before saving memories
 
 Propose any memory write via a picker (or prose) and save only after an explicit yes — never
 persist a fact about the person's preferences silently.
@@ -337,6 +384,8 @@ in the review loop (`../_shared/review-loop.md`).
 | "They pressed Skip → `[No preference]`, so I'll pick." | Skip = decide later, NOT you-pick. Leave it open; never Apply/Drop/choose. |
 | "Nothing else — go ahead (and do the work)." | The catcher approves nothing. Put scope in its own question. |
 | "F-2: Task 4 blocks Task 10 (P1) — apply?" | A bare id is not a question. Expand it into what it IS (§3). |
-| "The context is in my earlier message / in the plan doc." | One decision = one message. Quote the source inline (§11). |
-| "The overlay hides the text — I'll write it to a file." | Never a file to ask a question. Chat message + self-sufficient picker (§11). |
+| "The context is in my earlier message / in the plan doc." | One decision = one message. Quote the source inline (§12). |
+| "The overlay hides the text — I'll write it to a file." | Never a file to ask a question. Chat message + self-sufficient picker (§12). |
+| "The restore path gates enums but not text." | Mechanism-first. Open with what breaks for the person (§10). |
+| "They'll know what this subsystem does." | Assume they have never opened the file. Scenario first, jargon expanded (§10). |
 | "I'll record a private detail for context." | Never. Generic, neutral, zero personal data. |

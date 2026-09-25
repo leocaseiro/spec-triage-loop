@@ -46,7 +46,9 @@ switch to "hand off at 50% of the window" and demote this count to a backstop.*
 the repo root. It must carry everything the triage half needs, because that half will not
 re-read the review: the artifact path, the lap number, REVIEW-SKILL and REVIEW-MODE, every
 verified finding (What's wrong / Before → After / Proposed fix / Why it works, plus
-severity and evidence quotes, and a plain-language expansion of every document-local id it
+the scenario — what the person is doing and what they see go wrong, in their own terms,
+written by THIS half while the source is still open, because the triage half cannot see it —
+plus severity and evidence quotes, and a plain-language expansion of every document-local id it
 names — `Task 10` → "the theming task, not started"; `P1` → "ships broken" — because the
 triage half may not re-open the source to look one up), every dropped finding with its drop
 reason, the already-applied silent edits from step 2b, and the raw EXIT-SIGNAL. If the
@@ -81,8 +83,9 @@ incomplete — go back and finish it before stopping.
 ## Triage half (invocation B)
 
 4. **Triage** — use the `triage` skill: establish surviving findings as prose chunks
-   (What's wrong / Before → After / Proposed fix / Why it works — every finding *shows* the
-   change, never only describes it), then one AskUserQuestion picker in the same turn,
+   (The scenario / What's wrong / Before → After / Proposed fix / Why it works — every
+   finding opens with the scenario and *shows* the change), then one AskUserQuestion
+   picker in the same turn,
    batched <=4. The person decides Apply / Skip — decide later / Drop per finding.
 5. **Apply** the Apply decisions.
 6. **Record state** — write `last_applied` (highest severity applied this lap) and bump

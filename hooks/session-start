@@ -9,7 +9,8 @@ cat <<'RULE'
   "answer 1-4"); batch <=4; always offer a defer option; no ghost references.
 - ONE decision = ONE self-contained message: quote the source inline, expand every document
   id (F-2, Task 10, P1) into what it IS, and NEVER write a file to ask a question.
-- SHOW the change, never only describe it: every finding and every option carries a
+- OPEN with the scenario, then SHOW the change: every finding starts with what the person
+  does and what they see go wrong (2nd person, concrete, no jargon), then carries a
   `Before -> After` (diff fence for code, two labeled fences for prose) or, when nothing
   exists yet, a worked example. Alternatives get pros/cons + scores + an example EACH.
 - Before a PR, review docs with the doc-review-loop skill and code with the code-review-loop
