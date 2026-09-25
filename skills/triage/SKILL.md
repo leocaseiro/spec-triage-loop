@@ -13,13 +13,29 @@ prose chunks you write FIRST; the picker stays lean and references them. This ke
 scannable and lets the person drive it without hunting for context. The rules below are the
 whole discipline; follow all of them, not just the convenient ones.
 
-## 1. Every decision is a picker
+## 1. Every decision is a picker — but first, is it a decision?
 
 - Every question / confirmation / decision → an `AskUserQuestion` tool call. Never solicit a
   prose answer ("reply go", "say yes", "confirm below", "answer 1-4"). The only messages that
   stand without a picker are **pure notifications that need no answer**.
 - **Emit the picker in the SAME turn** as any lead-in. Announcing "I'll ask below" and then
   ending the turn *strands* the picker — there is no automatic next message, so it never fires.
+
+The person's judgment is the scarce resource. Two things must never be spent on it:
+
+- **What you could settle by trying it — spike it first.** An option you have not run is a
+  guess, and a picker built on guesses spends the person's judgment on a question you owned.
+  Run the smallest thing that settles it — a scratch script, a throwaway branch, one command,
+  one query — then ask with the answer in hand, or find you no longer need to ask at all. This
+  is also how an option earns the worked example §7 and §9 demand: you cannot show the result
+  of something you never ran. Say what you spiked and what came back, and mark any option you
+  genuinely could not test **(untested)**, so the person can see which way the evidence runs.
+- **A change that only removes ambiguity — just make it, and say so.** A confusing name, a
+  stale comment, a sentence with two readings, a missing unit, an undefined term, a typo: fix
+  it and report it in one line. Asking costs more of the person's attention than the change is
+  worth. The moment a fix changes behaviour, scope, or a real trade-off it stops being
+  disambiguation and becomes a real question — **that line is the test, not the size of the
+  diff.**
 
 ## 2. Batch as separate sub-questions — never bundle (the anti-pattern)
 
@@ -388,4 +404,6 @@ in the review loop (`../_shared/review-loop.md`).
 | "The overlay hides the text — I'll write it to a file." | Never a file to ask a question. Chat message + self-sufficient picker (§12). |
 | "The restore path gates enums but not text." | Mechanism-first. Open with what breaks for the person (§10). |
 | "They'll know what this subsystem does." | Assume they have never opened the file. Scenario first, jargon expanded (§10). |
+| "I'll ask them which approach would work." | If you can run it, run it. Spike first, ask with the result (§1). |
+| "Shall I rename this confusing variable?" | Ambiguity-only fixes need no approval. Make it, say you did (§1). |
 | "I'll record a private detail for context." | Never. Generic, neutral, zero personal data. |

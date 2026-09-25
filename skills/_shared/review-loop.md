@@ -50,10 +50,11 @@ the scenario — what the person is doing and what they see go wrong, in their o
 written by THIS half while the source is still open, because the triage half cannot see it —
 plus severity and evidence quotes, and a plain-language expansion of every document-local id it
 names — `Task 10` → "the theming task, not started"; `P1` → "ships broken" — because the
-triage half may not re-open the source to look one up), every dropped finding with its drop
-reason, the already-applied silent edits from step 2b, and the raw EXIT-SIGNAL. If the
-triage half cannot reconstruct the whole walk-through from this file alone, the file is
-incomplete — go back and finish it before stopping.
+triage half may not re-open the source to look one up), each fix's spike result from step 3
+or the mark **(untested)**, every dropped finding with its drop reason, the already-applied
+silent edits from step 2b, and the raw EXIT-SIGNAL. If the triage half cannot reconstruct the
+whole walk-through from this file alone, the file is incomplete — go back and finish it
+before stopping.
 
 ## Review half (invocation A)
 
@@ -76,6 +77,11 @@ incomplete — go back and finish it before stopping.
    *Before* text it confirmed. Do not open the source document in this context: measured on a
    real lap, a reviewer burned 139,895 tokens of its own context and handed back 248, while an
    inline `Read` of the source costs ~17,500 every time. Drop findings that fail; record why.
+   **Spike the fix, not only the finding.** VERIFY-CHECK confirms the *Before* exists; it never
+   runs the *After*. Where a proposed fix is cheap to try — it compiles, a test runs, one
+   command answers — have that same subagent apply it on a throwaway branch and report whether
+   it holds. Carry the result into the artifact, and mark any fix that could not be tried
+   **(untested)**, so triage can say so in the option rather than implying it was checked.
    **Then write the artifact and STOP.** Tell the person the lap is half done, how many
    findings survived verification, and the exact command that resumes it. Do not begin the
    walk-through in this session, however much context appears to be left.

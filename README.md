@@ -56,9 +56,9 @@ by hand.
 The loops do not re-implement review or model-tiering — they **compose** two existing skill
 families through the Skill tool by plugin-qualified name (`compound-engineering:…`,
 `superpowers:…`). The loop shape lives once in `skills/_shared/review-loop.md`; each loop
-skill only binds its four parameters — which review skill, which mode, the exit signal, and
-the verify check. The bound is real: the loop halts at a lap cap, or when a lap makes no
-progress, so "until clean" is never open-ended.
+skill only binds its five parameters — which review skill, which mode, the exit signal, the
+verify check, and where loop state is stored. The bound is real: the loop halts at a lap cap,
+or when a lap makes no progress, so "until clean" is never open-ended.
 
 ## Measuring whether it lands
 
