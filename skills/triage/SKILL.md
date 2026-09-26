@@ -54,6 +54,41 @@ person answers each independently. Never collapse several decisions into one que
    [Q-§6.ack] Approve §6?  → LGTM / Comments / Defer
 ```
 
+### Multi-select, for a run of low-severity findings
+
+`AskUserQuestion` also takes `multiSelect: true`, which turns one card's options into
+independent checkboxes. That is **not** the anti-pattern above. There the options were
+*verdicts over a group*; here **each option is one finding**, and checking F-7 while leaving
+F-8 is exactly the per-decision granularity the anti-pattern destroys.
+
+Use it only for a run of **P2 / P3 findings**. P0 and P1 always get their own card, where the
+scenario, the trade-off and the recommendation have room to be read.
+
+- **The context still goes in the chat** — one `📖 F-N` chunk per finding, with its scenario,
+  exactly as §8 and §10 require. The card carries the *switch*, never the reasoning.
+- **Each option is one line: `Approve F-N (recommended)`.** Its description names what the
+  finding is, in plain words. Never a compressed `before → after`, never a truncated rationale:
+  a trimmed half-sentence in a checkbox is unreadable, which is the failure this replaces.
+- **Say what unchecked means, in the question text, every time.** Unchecked leaves the finding
+  **open for a later round — it is never a Drop.** To drop one, the person says so in "Other".
+- **Four findings per card, maximum** — a card takes 2–4 options. Eleven P3s are three cards,
+  not one; never silently leave seven out.
+
+````text
+📖 F-7 — … full chunk, scenario first, in the chat message …
+📖 F-8 — … full chunk …
+📖 F-9 — … full chunk …
+
+…then, in the same turn, ONE card:
+
+[Q-P3] Three P3 findings (see 📖 F-7, F-8, F-9 above). Check each one to approve.
+       Anything left unchecked stays OPEN for a later round — it is not dropped.
+       To drop one, say so in Other.
+  ☐ Approve F-7 (recommended)  — the lint-suppression comment misstates what it blocks
+  ☐ Approve F-8 (recommended)  — the CSS check matches by substring, so it passes wrongly
+  ☐ Approve F-9 (recommended)  — the "settings were reset" toast fires when nothing changed
+````
+
 ## 3. The picker's shape
 
 - **Tag every question** with a stable `[Q-X.Y]` prefix so the person can reply `[R: Q-X.Y]`.
