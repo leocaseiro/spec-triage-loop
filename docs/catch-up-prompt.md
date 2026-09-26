@@ -27,7 +27,7 @@ Before your next question to me:
    in full. Do not skip it on the grounds that you already know it — you have an
    older copy.
 
-2. Apply it from here on. These four rules are new since you started:
+2. Apply it from here on. These rules are new since you started:
 
    §1  Before asking, check it IS a decision.
        - SPIKE anything you have not actually run, then come back with the result.
@@ -36,6 +36,14 @@ Before your next question to me:
        - Make ambiguity-only changes WITHOUT asking me — naming, stale comments,
          missing units, undefined terms, typos. Just say you did. The test is
          whether it changes behaviour, scope, or a real trade-off; not diff size.
+
+   §2  A run of P2/P3 findings goes in ONE multiSelect card, not one card each.
+       Every option is exactly "Approve F-N (recommended)", its description naming
+       the finding in plain words — never a compressed before → after, never a
+       truncated rationale. The context still goes in the chat as one 📖 chunk per
+       finding. Say in the question text that an unchecked box leaves the finding
+       OPEN for a later round and is never a Drop. Four findings per card maximum.
+       P0 and P1 always keep their own card.
 
    §3  Expand every document-local identifier on first use: F-2, Task 10, R5, P1,
        §4.2. I have not opened your source and cannot look one up from inside the
@@ -50,11 +58,23 @@ Before your next question to me:
        instead of telling me where to find it. Never write a file to ask me
        something — put it in the chat message, picker in the SAME turn.
 
-If you are mid-lap in doc-review-loop or code-review-loop, also re-read
-skills/_shared/review-loop.md: step 3 now spikes each fix (not just the finding),
-and the artifact must carry a scenario plus each fix's spike result.
+3. If you are running doc-review-loop or code-review-loop, re-read
+   skills/_shared/review-loop.md as well. What changed there:
 
-If the Skill tool is unavailable here, follow the four rules above as written.
+   - NEVER start a new lap while any finding is undecided. Stopping at the cap
+     PAUSES the triage half — it does not complete it. "A P0 or P1 was applied"
+     is true from the first applied P1 onward, so it is never your reason to move
+     on. If an early re-lap is worth it, ask me and name what is still open.
+   - The triage cap is 12 findings (was 8), or 5 picker rounds.
+   - Apply per batch, right after each picker round, each as its own commit —
+     not one apply pass at the end.
+   - An artifact left partly decided resumes at step 4 on its undecided findings.
+     That is the same lap continuing, not a new one, and they are never
+     re-reviewed.
+   - If I do override and you re-lap early, copy the undecided findings into the
+     next lap's artifact, ids and severities intact.
+
+If the Skill tool is unavailable here, follow the rules above as written.
 ```
 
 ## Short prompt
@@ -66,7 +86,11 @@ Re-run Skill("spec-triage-loop:triage") — the file changed on disk, your copy 
 stale, and it re-reads from disk. New since you started: spike anything untried
 before asking me; make ambiguity-only fixes without asking; expand every document
 id (F-2, P1, Task 10) into what it IS; open each finding with a second-person
-scenario; one decision = one self-contained message, never a file.
+scenario; one decision = one self-contained message, never a file; batch P2/P3
+findings into one multiSelect card whose options are just "Approve F-N
+(recommended)". If you are mid-lap: never start a new lap while any finding is
+undecided — the cap pauses triage, it does not finish it — the cap is now 12, and
+apply per batch with its own commit.
 ```
 
 ## What each rule is, and when it landed
@@ -75,9 +99,15 @@ scenario; one decision = one self-contained message, never a file.
 |------|---------------|--------|
 | §1 spike the untried | Pickers built on guesses; approved fixes that then fail to compile | 2026-09-26 |
 | §1 ambiguity-only fixes need no approval | Approval requests that cost more attention than the change | 2026-09-26 |
+| §2 multi-select for P2/P3 runs | Eleven cosmetic findings arriving as eleven separate cards | 2026-09-26 |
 | §3 expand document-local ids | `F-2`, `Task 10`, `P1` arriving bare, meaningless outside the source | 2026-09-18 |
 | §10 open with the scenario | Findings that open with the mechanism, readable only to whoever wrote them | 2026-09-26 |
 | §12 one self-contained message | One decision split across a chunk, a file, the source doc and the picker | 2026-09-18 |
+| loop: never re-lap with findings open | A lap that decided 8 of 25 and started the next lap anyway | 2026-09-26 |
+| loop: cap 8 → 12 | 25 findings needing 3–4 sittings, which made "move on" tempting | 2026-09-26 |
+| loop: apply per batch | Written order said triage-all-then-apply, which the cap makes impossible | 2026-09-26 |
+| loop: resume a partial artifact | A partly decided artifact matching neither "triaged" nor "untriaged" | 2026-09-26 |
+| loop: carry undecided across an override | Deferred findings stranded in a file nothing reads again | 2026-09-26 |
 
 Both prompts work from any project — the plugin is symlinked into `~/.claude/skills`.
 
