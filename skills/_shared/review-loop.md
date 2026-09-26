@@ -19,13 +19,20 @@ judgment-heavy half — it decides what lands in the person's artifact — and i
 inherit that load. The split is **structural, not a threshold**: nothing has to read a
 context gauge, which the model cannot do anyway.
 
-**Entry rule.** On invocation, look for an untriaged findings artifact for this artifact.
-If one exists, start at **step 4**. Otherwise start at **step 1**.
+**Entry rule.** On invocation, look for a findings artifact for this artifact that is not yet
+marked triaged — **including one a previous triage half left partly decided at the cap**. If one
+exists, start at **step 4**, on its undecided findings only. Otherwise start at **step 1**.
 
 **Cap the triage half at 8 findings, or 5 picker rounds — whichever comes first.** Then write
 the undecided findings plus the decisions so far back to the artifact and stop, exactly as the
-review half does. A finding that needed more than one picker round counts as two. The cap is a
-ceiling, not a quota: a short list just finishes early.
+review half does. A finding that needed more than one picker round counts as two against the
+finding cap. The cap is a ceiling, not a quota: a short list just finishes early.
+
+Stopping at the cap leaves the artifact un-marked, so the entry rule sends the next invocation
+back to step 4. **That is the same lap continuing, not a new one** — `lap` bumps only at step 6,
+once every finding is decided. The undecided findings are already verified and carry their own
+chunks, so they are picked up as they are and never re-reviewed. A long list therefore costs
+more triage invocations, not more laps.
 
 **In the triage half, read the findings artifact and nothing else.** Never re-open the source
 document to compose a chunk — measured across real sessions, `Read` was 24.5% of all context
