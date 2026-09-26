@@ -23,7 +23,7 @@ context gauge, which the model cannot do anyway.
 marked triaged — **including one a previous triage half left partly decided at the cap**. If one
 exists, start at **step 4**, on its undecided findings only. Otherwise start at **step 1**.
 
-**Cap the triage half at 8 findings, or 5 picker rounds — whichever comes first.** Then write
+**Cap the triage half at 12 findings, or 5 picker rounds — whichever comes first.** Then write
 the undecided findings plus the decisions so far back to the artifact and stop, exactly as the
 review half does. A finding that needed more than one picker round counts as two against the
 finding cap. The cap is a ceiling, not a quota: a short list just finishes early.
@@ -41,6 +41,13 @@ precisely so the triage half never has to.
 
 **State the finding count in the artifact header**, so the cap is checkable at a glance
 instead of by recount.
+
+*Where 12 comes from.* Measured on the 2026-09-25 code-review triage: context entered the walk
+at 149,680 tokens and each finding cost ~17,900 more, triage plus apply plus spikes plus
+commits. Twelve therefore projects to ~364k — under the 374k median peak of sessions that use a
+findings artifact, and well under the 558k worst case observed across nineteen of them. That
+same session ran 21 findings to 472k without trouble, so 12 keeps real headroom. Re-measure
+before moving it again.
 
 *Why a count and not a token budget: the model cannot observe its own context. There is no
 gauge, no warning, and no auto-compact event before the ceiling — one sampled session reached
@@ -101,10 +108,22 @@ before stopping.
    picker in the same turn,
    batched <=4. The person decides Apply / Skip — decide later / Drop per finding.
 5. **Apply** the Apply decisions.
+5b. **Apply as you go, not at the end.** Steps 4 and 5 interleave: apply each batch's Apply
+   decisions right after that picker round, each as its own commit, before the next round. The
+   cap and the ≤4-per-round batching make a single apply-everything-at-the-end pass impossible,
+   and a per-batch commit keeps every decision revertable on its own.
 6. **Record state** — write `last_applied` (highest severity applied this lap) and bump
    `lap` to STATE-STORE, so a compaction cannot lose the re-lap decision. Mark the lap's
-   findings artifact triaged, so the entry rule does not re-enter this half.
-7. **Decide the lap** — evaluate these in order, every lap:
+   findings artifact triaged, so the entry rule does not re-enter this half. **Only when every
+   finding is decided.** At the cap you write partial state instead — decisions so far plus the
+   undecided findings — and neither bump `lap` nor mark the artifact triaged.
+7. **Decide the lap** — **only once this lap's artifact has no undecided findings left.**
+   If any remain — you stopped at the cap — you are NOT at step 7: apply what was decided,
+   write the partial state, and end the session so the next invocation resumes at step 4.
+   Stopping at the cap **pauses** the triage half; it never completes it. "A P1 was applied"
+   is true from the first applied P1 onward, so it can never be your reason to move on while
+   findings are still undecided. The person may choose to re-lap early — but only by saying
+   so: ask, name what is still undecided, and never assume it. Then evaluate in order:
    a. **Bound first** — halt and hand to the person if `lap` reached the cap (default 5), or
       if this lap did not reduce the count of unresolved P0/P1 findings (no progress).
       Identify findings across laps by section + title; lap 1 has no previous set and never
