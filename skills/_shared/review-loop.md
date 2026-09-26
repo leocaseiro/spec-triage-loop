@@ -131,6 +131,11 @@ before stopping.
    b. **Re-lap** — if a P0 or P1 was applied this lap, or EXIT-SIGNAL is not clean, return
       to step 2 — **as a new invocation**, never by continuing this one. A re-lap starts a
       fresh review half.
+      **Carry the undecided forward.** If the person overrode the gate to re-lap with
+      findings still open, copy those findings into lap N+1's artifact before the review
+      runs, keeping their ids and severities. They are already verified — they get triaged
+      alongside the new findings, are never re-reviewed, and are never left behind in a file
+      nothing reads again. "Skip — decide later" is a promise that later exists.
    c. **Exit** — EXIT-SIGNAL reports clean and nothing above fired.
 
    (The person may override in either direction.) Never loop unbounded.
