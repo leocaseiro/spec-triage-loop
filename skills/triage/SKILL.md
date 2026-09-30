@@ -343,6 +343,15 @@ four by hand before they could answer at all.
   `as covered in Task 4` are errands, not context. Paste the one or two relevant lines
   verbatim into the chunk — that is exactly what `Before → After` (§9) and the findings
   artifact's evidence quotes exist to make cheap.
+- **Any path you DO print must resolve for the person.** When you name a file — in a chunk, an
+  option, or a resume command — give the **absolute** path in a code block, naming the worktree
+  that actually holds it. A repo-relative `docs/plans/<doc>.md` is a fragment, not a location:
+  it resolves against whatever checkout the reader has open, and in a worktree-per-task repo
+  that is usually one where the file does not exist. Relative is safe **only** for a file in
+  the reader's own current checkout. Observed 2026-09-30: a triage half handed over
+  `docs/plans/<doc>.md` from a session whose cwd was a different worktree than the document's;
+  the person went looking and found nothing. Build the absolute form from where the file *is*,
+  not from your own cwd — being absolute is not enough if it names the wrong worktree.
 - **Never create a file in order to ask a question.** No scratch `context.md`, no
   `questions.md`, no "I wrote it up, go read it". Put the context in the chat message. A
   picker overlay that covers the message text is *not* a reason to write a file — it is the

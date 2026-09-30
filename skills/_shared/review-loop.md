@@ -70,6 +70,39 @@ silent edits from step 2b, and the raw EXIT-SIGNAL. If the triage half cannot re
 whole walk-through from this file alone, the file is incomplete — go back and finish it
 before stopping.
 
+### Paths in the artifact must RESOLVE — three forms, and never a bare one
+
+The loop runs across worktrees by design: the session doing the review often has a different
+cwd from the worktree holding the document. So a repo-relative path in the artifact is not a
+path — it is a path *fragment*, and the triage half, which may read only this file, will hand
+that fragment to the person as if it were a location. Measured failure (2026-09-30): a triage
+half printed `docs/plans/<doc>.md` as a resume command; the document was in a different
+worktree entirely and the person could not find it.
+
+`header` therefore carries **three** forms, and the review half fills all three:
+
+```json
+"artifact_path":            "docs/plans/<doc>.md",
+"artifact_worktree":        "<worktree-dir-name>",
+"artifact_path_from_root":  ".claude/worktrees/<worktree-dir-name>/docs/plans/<doc>.md",
+"artifact_permalink":       "https://<host>/<owner>/<repo>/blob/<pushed-sha>/docs/plans/<doc>.md"
+```
+
+- **Tracked files get the repo-root-relative form.** `findings.json` is committed, and in a
+  public repo it must leak nothing and stay portable across machines: never an absolute
+  `/Users/<name>/...`, and not `~/<dir>/<repo>/...` either — that still hardcodes one layout.
+  Any reader prepends its own repo root.
+- **Chat gets the ABSOLUTE form**, built by prepending the real repo root at print time, in a
+  code block, so the person can paste it into a terminal or a file dialog. This is the one
+  place the absolute path belongs. Never print the bare `artifact_path` to a person.
+- **The permalink is the always-resolvable second reference**, which means the artifact and
+  the reviewed document must be **pushed before either half hands one over**. Record the sha
+  the permalink pins.
+
+**Both halves print the absolute path and the permalink when they hand over.** A resume
+command whose path resolves against the wrong worktree sends the next lap at a file that is
+not there.
+
 ## Review half (invocation A)
 
 1. **Produce/hold** the artifact under review as a **committed, green checkpoint** (a doc, or
@@ -96,8 +129,11 @@ before stopping.
    command answers — have that same subagent apply it on a throwaway branch and report whether
    it holds. Carry the result into the artifact, and mark any fix that could not be tried
    **(untested)**, so triage can say so in the option rather than implying it was checked.
-   **Then write the artifact and STOP.** Tell the person the lap is half done, how many
-   findings survived verification, and the exact command that resumes it. Do not begin the
+   **Then commit, push, write the artifact and STOP.** Push before you hand over, so the
+   permalink resolves. Tell the person the lap is half done, how many findings survived
+   verification, and the exact command that resumes it — carrying the **absolute** path to
+   the document (a code block, built from the real repo root, naming the worktree that
+   actually holds it) plus its permalink, never the bare repo-relative fragment. Do not begin the
    walk-through in this session, however much context appears to be left.
 
 ## Triage half (invocation B)
