@@ -45,6 +45,13 @@ Before your next question to me:
        OPEN for a later round and is never a Drop. Four findings per card maximum.
        P0 and P1 always keep their own card.
 
+   §8  Show the REVIEWER'S CONFIDENCE next to the severity, in every chunk header and
+       every question. The engines score each finding 100 / 75 / 50 and it never used to
+       reach me. 100 = the reviewer confirmed it; 75 = inferred from reading, not run;
+       50 = a suspicion, not a finding. Expand it, never ship the bare number.
+       §1 adds the trigger: a 50 must be SPIKED before you ask me, or put to me labelled
+       a suspicion with the spike you could not run named. Spike a 75 when that is cheap.
+
    §3  Expand every document-local identifier on first use: F-2, Task 10, R5, P1,
        §4.2. I have not opened your source and cannot look one up from inside the
        picker. Tell me what the thing IS, not the bare number.
@@ -73,6 +80,11 @@ Before your next question to me:
      re-reviewed.
    - If I do override and you re-lap early, copy the undecided findings into the
      next lap's artifact, ids and severities intact.
+   - Hand off between halves with /compact, not a brand-new session — I prefer it and
+     the loop now says so. The split protects the CONTEXT, not the session's identity;
+     the hook re-fires on compact and the artifact is on disk. Write the artifact
+     BEFORE compacting: a compaction summary is lossy, the artifact is the contract.
+   - The artifact must carry each finding's confidence score, not just its severity.
 
 If the Skill tool is unavailable here, follow the rules above as written.
 ```
@@ -88,9 +100,10 @@ before asking me; make ambiguity-only fixes without asking; expand every documen
 id (F-2, P1, Task 10) into what it IS; open each finding with a second-person
 scenario; one decision = one self-contained message, never a file; batch P2/P3
 findings into one multiSelect card whose options are just "Approve F-N
-(recommended)". If you are mid-lap: never start a new lap while any finding is
-undecided — the cap pauses triage, it does not finish it — the cap is now 12, and
-apply per batch with its own commit.
+(recommended)"; and show each finding's reviewer confidence (100/75/50) next to its
+severity, spiking any 50 before you ask me. If you are mid-lap: never start a new lap
+while any finding is undecided — the cap pauses triage, it does not finish it — the cap is now 12, and
+apply per batch with its own commit; hand off with /compact rather than a new session.
 ```
 
 ## What each rule is, and when it landed
@@ -108,6 +121,9 @@ apply per batch with its own commit.
 | loop: apply per batch | Written order said triage-all-then-apply, which the cap makes impossible | 2026-09-26 |
 | loop: resume a partial artifact | A partly decided artifact matching neither "triaged" nor "untriaged" | 2026-09-26 |
 | loop: carry undecided across an override | Deferred findings stranded in a file nothing reads again | 2026-09-26 |
+| §8 show reviewer confidence | 63% of findings are only 75% sure; 0 of 2,280 questions said so | 2026-10-08 |
+| §1 spike a confidence-50 finding | A suspicion arriving in the same voice as a confirmed defect | 2026-10-08 |
+| loop: /compact is the preferred handoff | "must not share a session" read as banning the compact workflow | 2026-10-08 |
 
 Both prompts work from any project — the plugin is symlinked into `~/.claude/skills`.
 

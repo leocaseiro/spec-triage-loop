@@ -12,6 +12,15 @@ invocation A — REVIEW half   steps 1-3   writes findings.json, then STOPS
 invocation B — TRIAGE half   steps 4-7   reads findings.json, and little else
 ```
 
+**Prefer `/compact` over a brand-new session.** What the split protects is the *context*, not
+the session's identity, so emptying the window is the whole requirement — and compaction does
+that while leaving one session to maintain instead of two. It is also the better-supported path:
+the SessionStart hook's matcher is `startup|clear|compact`, so these rules re-inject on
+compaction, and the findings artifact lives on disk, which compaction does not touch. **Write
+the artifact before compacting, always** — a compaction summary is lossy, and the artifact is
+the contract between the halves. A fresh session stays perfectly valid; it just costs an extra
+session for the same guarantee.
+
 **Why.** The review half fills a context window with machinery the triage half has no
 use for: the review skill's own instructions, its subagent template and findings schema,
 persona selection, raw reviewer payloads, verification output. Triage is the
@@ -62,8 +71,9 @@ re-read the review: the artifact path, the lap number, REVIEW-SKILL and REVIEW-M
 verified finding (What's wrong / Before → After / Proposed fix / Why it works, plus
 the scenario — what the person is doing and what they see go wrong, in their own terms,
 written by THIS half while the source is still open, because the triage half cannot see it —
-plus severity and evidence quotes, and a plain-language expansion of every document-local id it
-names — `Task 10` → "the theming task, not started"; `P1` → "ships broken" — because the
+plus severity, the reviewer's confidence score, and evidence quotes, and a plain-language
+expansion of every document-local id it names — `Task 10` → "the theming task, not started";
+`P1` → "ships broken"; `confidence: 75` → "inferred from reading, not run" — because the
 triage half may not re-open the source to look one up), each fix's spike result from step 3
 or the mark **(untested)**, every dropped finding with its drop reason, the already-applied
 silent edits from step 2b, and the raw EXIT-SIGNAL. If the triage half cannot reconstruct the
@@ -165,8 +175,8 @@ not there.
       Identify findings across laps by section + title; lap 1 has no previous set and never
       trips this.
    b. **Re-lap** — if a P0 or P1 was applied this lap, or EXIT-SIGNAL is not clean, return
-      to step 2 — **as a new invocation**, never by continuing this one. A re-lap starts a
-      fresh review half.
+      to step 2 — **as a new invocation** (a `/compact` counts, and is preferred), never by
+      carrying this context onward. A re-lap starts a fresh review half.
       **Carry the undecided forward.** If the person overrode the gate to re-lap with
       findings still open, copy those findings into lap N+1's artifact before the review
       runs, keeping their ids and severities. They are already verified — they get triaged

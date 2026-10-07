@@ -30,6 +30,11 @@ The person's judgment is the scarce resource. Two things must never be spent on 
   is also how an option earns the worked example §7 and §9 demand: you cannot show the result
   of something you never ran. Say what you spiked and what came back, and mark any option you
   genuinely could not test **(untested)**, so the person can see which way the evidence runs.
+  **Reviewer confidence is the objective trigger.** Review engines score every finding 100 / 75
+  / 50. A **50 is a suspicion, not a finding** — spike it before it reaches the person, or put it
+  to them labelled a suspicion, naming the spike you could not run. A **75** was inferred from
+  reading rather than running: spike it whenever that is cheap. A **100** the reviewer already
+  confirmed — state it and move on.
 - **A change that only removes ambiguity — just make it, and say so.** A confusing name, a
   stale comment, a sentence with two readings, a missing unit, an undefined term, a typo: fix
   it and report it in one line. Asking costs more of the person's attention than the change is
@@ -223,6 +228,18 @@ The tables never replace the depth — they are the scannable summary on top of 
   example when there is no "before" yet; §9) /
   **Proposed fix** (the specific change, in words) /
   **Why it works** (why that change resolves it).
+- **Carry the reviewer's confidence next to the severity, expanded** — in the chunk header and
+  in the question text, everywhere severity already goes. The engines emit it on every finding;
+  observed values are 100 / 75 / 50. It is a document-local number (§3), so never ship it bare:
+  - **100** — the reviewer confirmed it against the source.
+  - **75** — inferred from reading the code. Likely, unproven.
+  - **50** — a suspicion worth checking, not a finding to act on as it stands (§1 spikes these).
+
+  Measured across 42 artifacts and 504 findings: 19% are 100, **63% are 75**, 18% are 50 — and
+  a P1 never drops to 50. So the risk is not in the severe findings; it is the large middle band
+  that reads as settled when it was only inferred. Confidence is the reviewer's own score at
+  raise time: if your own spike or the verify step confirmed it, say so rather than leaving the
+  person to wonder which it is.
 - **Establish all findings as chunks FIRST** (prose), then walk them in batched lean questions
   (≤ 4 per call), each referencing its chunk, with a consistent option set across the batch
   (`Apply / Skip—decide-later / Drop / Auto-resolve rest`). Each finding is explained once; each
@@ -450,4 +467,6 @@ in the review loop (`../_shared/review-loop.md`).
 | "They'll know what this subsystem does." | Assume they have never opened the file. Scenario first, jargon expanded (§10). |
 | "I'll ask them which approach would work." | If you can run it, run it. Spike first, ask with the result (§1). |
 | "Shall I rename this confusing variable?" | Ambiguity-only fixes need no approval. Make it, say you did (§1). |
+| "F-6 (P2) — apply?" with no confidence shown | 63% of findings are only 75% sure. Show it next to severity (§8). |
+| "conf=50, but it reads plausible, so I'll ask." | 50 is a suspicion, not a finding. Spike it or label it (§1). |
 | "I'll record a private detail for context." | Never. Generic, neutral, zero personal data. |
