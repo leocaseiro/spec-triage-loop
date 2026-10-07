@@ -276,7 +276,9 @@ context, never the whole file:
   + const timeout = Number(env.TIMEOUT ?? 30)
   ```
 
-- **Prose, copy, or a rewritten block** → two labeled fences, each with its source ref:
+- **Prose, copy, or a rewritten block** → one fence carrying both sides, each labelled with
+  its source ref (two separate fences are fine; what matters is that the labels line up and
+  the sides sit adjacent, so the eye can do the diffing):
 
   ```text
   Before (SKILL.md:149):  **Proposed fix** (the specific change)
@@ -284,6 +286,27 @@ context, never the whole file:
   ```
 
 - **A one-token change** → inline, no fence: `lap: 3` → `lap: 4`.
+- **A table row, or a cell inside one** → **never fence the row's source.** The pipes are
+  carriage, not content: a `|`-delimited line wrapped inside a monospace fence is the least
+  readable form the change can take, and it makes the person re-table it in their head. Choose
+  by how many rows changed:
+  - **One row** → name the table and the row, then show only the sentences that changed, as
+    labelled prose. A prose cell is prose; render it as prose.
+  - **Two or more rows** → one **rendered** markdown table with `Before` and `After` columns —
+    rendered, never fenced — so the cells sit side by side.
+
+  ```text
+  ❌ the row's source, fenced — the pipes become noise and the sentence wraps into mush
+     | **Start handshake** | learned start lead L (median of the first 3 readings after
+     Play). If the synth is slower (L > 0) the **media start is delayed by L**. If the …
+
+  ✅ name the row; show only what changed
+     §6.2 → the "Start handshake" row, on what happens when the synth is slower:
+     Before:  the synth starts L earlier in the song.
+     After:   the synth starts L earlier in the song — but never past the target; a
+              positive per-speed offset is caught up after the first beat by a faster
+              nudge (≤ 8%).
+  ```
 
 **Empty sides are stated, never left blank** — `Before: (absent — no such section today)` for a
 pure addition, `After: (removed)` for a deletion. A blank side reads as an oversight; a labelled
@@ -293,8 +316,20 @@ empty one is information.
 own description, so the choice stays decidable once the chunk has scrolled away — e.g.
 *"`Proposed fix` prose → prose + the shown After"*.
 
-**Size guard:** past ~12 lines a side it is a plan, not a fix. Show the representative hunk, say
-how many other sites match, and split the finding if they differ.
+**Size guard — count the UNCHANGED lines, not the total.** Never trim a change the person needs
+in full: if twenty lines genuinely changed, show twenty, because a collapsed block they cannot
+follow is worse than a long one they can. What must never appear is text that did *not* change —
+the rest of the cell, the untouched rows beside the edited one, the body of the function around
+the edited line. Every line you show is either changed, or the ~1 line of context that makes a
+changed line legible.
+
+- **Long because the change is long** → keep it whole, and put a one-line summary of what
+  changed above it, so the person can read the detail or take the summary and move on.
+- **Long because unchanged text rode along** → cut the unchanged text. This is the usual cause,
+  and it is what makes a long block unreadable rather than merely long.
+- **Past ~12 changed lines**, stop and ask whether this is still one fix. If it has become a
+  rewrite, say so: show the representative hunk, say how many other sites match, and split the
+  finding when they differ.
 
 ## 10. Ground it — open every finding with the scenario
 
@@ -469,4 +504,6 @@ in the review loop (`../_shared/review-loop.md`).
 | "Shall I rename this confusing variable?" | Ambiguity-only fixes need no approval. Make it, say you did (§1). |
 | "F-6 (P2) — apply?" with no confidence shown | 63% of findings are only 75% sure. Show it next to severity (§8). |
 | "conf=50, but it reads plausible, so I'll ask." | 50 is a suspicion, not a finding. Spike it or label it (§1). |
+| "\| **Start handshake** \| learned start lead L…" in a fence | Table source fenced. Name the row, show the changed sentences (§9). |
+| "That's 16 lines, I'll trim it to 12." | Cut the UNCHANGED lines, never the change itself (§9). |
 | "I'll record a private detail for context." | Never. Generic, neutral, zero personal data. |

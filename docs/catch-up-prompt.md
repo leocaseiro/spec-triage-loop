@@ -52,6 +52,13 @@ Before your next question to me:
        §1 adds the trigger: a 50 must be SPIKED before you ask me, or put to me labelled
        a suspicion with the spike you could not run named. Spike a 75 when that is cheap.
 
+   §9  NEVER fence a markdown table's pipe source. The pipes are carriage, not content,
+       and a wrapped |-delimited line in a monospace fence is unreadable. One row
+       changed: name the table and the row and show only the sentences that changed, as
+       prose. Two or more rows: one RENDERED Before/After table, never a fenced one.
+       And the size guard counts UNCHANGED lines, not total — if twenty lines genuinely
+       changed, show twenty; cut the text that did not change, never the change itself.
+
    §3  Expand every document-local identifier on first use: F-2, Task 10, R5, P1,
        §4.2. I have not opened your source and cannot look one up from inside the
        picker. Tell me what the thing IS, not the bare number.
@@ -125,6 +132,8 @@ new session.
 | §8 show reviewer confidence | 63% of findings are only 75% sure; 0 of 2,280 questions said so | 2026-10-08 |
 | §1 spike a confidence-50 finding | A suspicion arriving in the same voice as a confirmed defect | 2026-10-08 |
 | loop: /compact is the preferred handoff | "must not share a session" read as banning the compact workflow | 2026-10-08 |
+| §9 never fence table source | A changed spec row arriving as 16 lines of wrapped pipe markup | 2026-10-08 |
+| §9 size guard counts unchanged lines | A line cap that would trim the change instead of the padding | 2026-10-08 |
 
 Both prompts work from any project — the plugin is symlinked into `~/.claude/skills`.
 
