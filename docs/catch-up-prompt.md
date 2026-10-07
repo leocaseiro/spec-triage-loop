@@ -102,8 +102,9 @@ scenario; one decision = one self-contained message, never a file; batch P2/P3
 findings into one multiSelect card whose options are just "Approve F-N
 (recommended)"; and show each finding's reviewer confidence (100/75/50) next to its
 severity, spiking any 50 before you ask me. If you are mid-lap: never start a new lap
-while any finding is undecided — the cap pauses triage, it does not finish it — the cap is now 12, and
-apply per batch with its own commit; hand off with /compact rather than a new session.
+while any finding is undecided — the cap pauses triage, it does not finish it — the cap
+is now 12, apply per batch with its own commit, and hand off with /compact rather than a
+new session.
 ```
 
 ## What each rule is, and when it landed
