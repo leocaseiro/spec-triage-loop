@@ -45,6 +45,10 @@ Before your next question to me:
        OPEN for a later round and is never a Drop. Four findings per card maximum.
        P0 and P1 always keep their own card.
 
+   §3  Expand every document-local identifier on first use: F-2, Task 10, R5, P1,
+       §4.2. I have not opened your source and cannot look one up from inside the
+       picker. Tell me what the thing IS, not the bare number.
+
    §8  Show the REVIEWER'S CONFIDENCE next to the severity, in every chunk header and
        every question. The engines score each finding 100 / 75 / 50 and it never used to
        reach me. 100 = the reviewer confirmed it; 75 = inferred from reading, not run;
@@ -59,9 +63,6 @@ Before your next question to me:
        And the size guard counts UNCHANGED lines, not total — if twenty lines genuinely
        changed, show twenty; cut the text that did not change, never the change itself.
 
-   §3  Expand every document-local identifier on first use: F-2, Task 10, R5, P1,
-       §4.2. I have not opened your source and cannot look one up from inside the
-       picker. Tell me what the thing IS, not the bare number.
 
    §10 Open every finding with THE SCENARIO, before any mechanism — a short
        second-person walk-through of what I am doing and what I see go wrong.
