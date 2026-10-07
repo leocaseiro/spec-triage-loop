@@ -63,7 +63,6 @@ Before your next question to me:
        And the size guard counts UNCHANGED lines, not total — if twenty lines genuinely
        changed, show twenty; cut the text that did not change, never the change itself.
 
-
    §10 Open every finding with THE SCENARIO, before any mechanism — a short
        second-person walk-through of what I am doing and what I see go wrong.
        Concrete, no jargon. Then What's wrong / Before → After / Proposed fix /
@@ -109,7 +108,10 @@ id (F-2, P1, Task 10) into what it IS; open each finding with a second-person
 scenario; one decision = one self-contained message, never a file; batch P2/P3
 findings into one multiSelect card whose options are just "Approve F-N
 (recommended)"; and show each finding's reviewer confidence (100/75/50) next to its
-severity, spiking any 50 before you ask me. If you are mid-lap: never start a new lap
+severity, spiking any 50 before you ask me; and never fence a markdown table's pipe
+source — name the row and show only the sentences that changed (two or more rows: a
+rendered Before/After table), trimming the UNCHANGED lines rather than the change.
+If you are mid-lap: never start a new lap
 while any finding is undecided — the cap pauses triage, it does not finish it — the cap
 is now 12, apply per batch with its own commit, and hand off with /compact rather than a
 new session.
