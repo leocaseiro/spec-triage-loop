@@ -65,6 +65,9 @@ Before your next question to me:
        sentence starts. Prose: bold label on its own line, text as a blockquote under it.
        Table, one row changed: name the row, show only the changed sentences. Two or more
        rows: one RENDERED Before/After table. A `diff` fence for code is right and works.
+       Even when the MARKUP is what changed — bold to italic, a list becoming a table —
+       render both sides; watching it change is the demonstration. Only a change that
+       renders identically (a trailing space, an indent) needs saying in words instead.
        And the size guard counts UNCHANGED lines, not total — if twenty lines genuinely
        changed, show twenty; cut the text that did not change, never the change itself.
 

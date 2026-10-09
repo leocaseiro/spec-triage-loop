@@ -307,9 +307,13 @@ context, never the whole file:
   **After:**
   > Proposed fix: the specific change, with the After shown.
 
-  If the *markup itself* is what changed — `**bold**` → `*italic*`, a pipe added, an indent
-  fixed — that is a line-level edit and not prose: use the `diff` fence above, where the exact
-  characters are the point.
+  **A markup change renders too.** When the change *is* the markup — bold becoming italic, a
+  list becoming a table, a heading dropping a level — render both sides anyway: watching
+  **this** turn into *this* is the clearest demonstration there is, and the raw characters tell
+  the person less, not more. The only thing rendering cannot show is a change that renders
+  **identically** — a trailing space, an indent, `_italic_` versus `*italic*`. That is not a
+  reason to fence the block and hope they spot a space: say in words what moved, and name the
+  one character inline if it helps.
 
 - **A one-token change** → inline, no fence: `lap: 3` → `lap: 4`.
 - **A table row, or a cell inside one** → **never fence the row's source.** The pipes are
@@ -533,4 +537,5 @@ in the review loop (`../_shared/review-loop.md`).
 | "\| **Start handshake** \| learned start lead L…" in a fence | Table source fenced. Name the row, show the changed sentences (§9). |
 | "That's 16 lines, I'll trim it to 12." | Cut the UNCHANGED lines, never the change itself (§9). |
 | "`Before:` … `After:` …" aligned in a text fence | Prose in a fence can't reflow; on a phone half of it is gone (§9). |
+| "The markup changed, so I'll fence the source." | Render both sides — seeing bold become italic IS the change (§9). |
 | "I'll record a private detail for context." | Never. Generic, neutral, zero personal data. |
