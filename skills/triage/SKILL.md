@@ -273,6 +273,15 @@ no column alignment, no side-by-side padding, no wide table inside a fence. Vert
 free; horizontal space is not. A `diff` fence is the one place sideways overflow is tolerable,
 because the `+`/`-` markers and the colouring still carry the shape of the change.
 
+**Markdown is rendered, never fenced.** This is the rule the cases below only apply. If what
+you are showing is markdown the person reads as *output* — a sentence, a bullet, a heading, a
+table row, a quoted paragraph of their own document — **render it**, so it reflows and so they
+see what a reader will see. A fence is for **code**: text whose exact characters are the point
+and whose lines are short by nature. Putting markdown in a fence shows them the source of a
+thing they asked to read, at a width that cuts it in half. This applies to the *current* text
+too: quoting "what it says today" as fenced markdown source is the same mistake — render it, or
+quote the one phrase inline with backticks.
+
 **How to render it** — chosen by what changed. Excerpt the changed lines plus ~1 line of
 context, never the whole file:
 
@@ -290,11 +299,13 @@ context, never the whole file:
   column spends thirty characters of a width you do not have before the sentence starts.
   Inline `code` still renders inside a blockquote, so backticks keep working.
 
-  > **Before** (SKILL.md:149):
-  > > **Proposed fix** (the specific change)
-  >
-  > **After:**
-  > > **Proposed fix** (the specific change, showing the After)
+  Shaped like this — label, newline, blockquote; nothing in a fence:
+
+  **Before** (SKILL.md:149):
+  > Proposed fix: the specific change.
+
+  **After:**
+  > Proposed fix: the specific change, with the After shown.
 
   If the *markup itself* is what changed — `**bold**` → `*italic*`, a pipe added, an indent
   fixed — that is a line-level edit and not prose: use the `diff` fence above, where the exact
