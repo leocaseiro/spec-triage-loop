@@ -266,6 +266,13 @@ what a snippet removes and prose cannot.
   solving, and what does solving it look like.*
 - **Never** put a finding or an option to the person with neither.
 
+**Assume a phone.** The person may be reading on mobile remote control, where the usable width
+is roughly 45 characters and a code fence does not reflow — it scrolls sideways, and whatever is
+past the edge is invisible, not merely awkward. So **never let horizontal space carry meaning**:
+no column alignment, no side-by-side padding, no wide table inside a fence. Vertical space is
+free; horizontal space is not. A `diff` fence is the one place sideways overflow is tolerable,
+because the `+`/`-` markers and the colouring still carry the shape of the change.
+
 **How to render it** — chosen by what changed. Excerpt the changed lines plus ~1 line of
 context, never the whole file:
 
@@ -276,14 +283,22 @@ context, never the whole file:
   + const timeout = Number(env.TIMEOUT ?? 30)
   ```
 
-- **Prose, copy, or a rewritten block** → one fence carrying both sides, each labelled with
-  its source ref (two separate fences are fine; what matters is that the labels line up and
-  the sides sit adjacent, so the eye can do the diffing):
+- **Prose, copy, or a rewritten block** → **no fence at all.** Prose has to reflow to the
+  reader's screen and a fence never does: it scrolls sideways, so on a phone the right-hand
+  half of every line is simply gone. Use rendered markdown — a bold label on its **own line**,
+  the text as a blockquote beneath it. **Never align the two sides into columns**: a label
+  column spends thirty characters of a width you do not have before the sentence starts.
+  Inline `code` still renders inside a blockquote, so backticks keep working.
 
-  ```text
-  Before (SKILL.md:149):  **Proposed fix** (the specific change)
-  After:                  **Proposed fix** (the specific change, showing the After)
-  ```
+  > **Before** (SKILL.md:149):
+  > > **Proposed fix** (the specific change)
+  >
+  > **After:**
+  > > **Proposed fix** (the specific change, showing the After)
+
+  If the *markup itself* is what changed — `**bold**` → `*italic*`, a pipe added, an indent
+  fixed — that is a line-level edit and not prose: use the `diff` fence above, where the exact
+  characters are the point.
 
 - **A one-token change** → inline, no fence: `lap: 3` → `lap: 4`.
 - **A table row, or a cell inside one** → **never fence the row's source.** The pipes are
@@ -506,4 +521,5 @@ in the review loop (`../_shared/review-loop.md`).
 | "conf=50, but it reads plausible, so I'll ask." | 50 is a suspicion, not a finding. Spike it or label it (§1). |
 | "\| **Start handshake** \| learned start lead L…" in a fence | Table source fenced. Name the row, show the changed sentences (§9). |
 | "That's 16 lines, I'll trim it to 12." | Cut the UNCHANGED lines, never the change itself (§9). |
+| "`Before:` … `After:` …" aligned in a text fence | Prose in a fence can't reflow; on a phone half of it is gone (§9). |
 | "I'll record a private detail for context." | Never. Generic, neutral, zero personal data. |
