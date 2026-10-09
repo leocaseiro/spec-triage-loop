@@ -56,10 +56,15 @@ Before your next question to me:
        §1 adds the trigger: a 50 must be SPIKED before you ask me, or put to me labelled
        a suspicion with the spike you could not run named. Spike a 75 when that is cheap.
 
-   §9  NEVER fence a markdown table's pipe source. The pipes are carriage, not content,
-       and a wrapped |-delimited line in a monospace fence is unreadable. One row
-       changed: name the table and the row and show only the sentences that changed, as
-       prose. Two or more rows: one RENDERED Before/After table, never a fenced one.
+   §9  MARKDOWN IS RENDERED TO ME, NEVER PUT IN A CODE SNIPPET. If it is markdown I read
+       as output — a sentence, a bullet, a heading, a table row, a paragraph of my own
+       document, or a quote of what it says today — render it. A fence is for CODE, whose
+       exact characters are the point. I often read on mobile remote control: a fence does
+       not reflow, it scrolls sideways, and everything past ~45 characters is invisible.
+       So no Before:/After: columns either — a label column eats the width before the
+       sentence starts. Prose: bold label on its own line, text as a blockquote under it.
+       Table, one row changed: name the row, show only the changed sentences. Two or more
+       rows: one RENDERED Before/After table. A `diff` fence for code is right and works.
        And the size guard counts UNCHANGED lines, not total — if twenty lines genuinely
        changed, show twenty; cut the text that did not change, never the change itself.
 
@@ -108,9 +113,11 @@ id (F-2, P1, Task 10) into what it IS; open each finding with a second-person
 scenario; one decision = one self-contained message, never a file; batch P2/P3
 findings into one multiSelect card whose options are just "Approve F-N
 (recommended)"; and show each finding's reviewer confidence (100/75/50) next to its
-severity, spiking any 50 before you ask me; and never fence a markdown table's pipe
-source — name the row and show only the sentences that changed (two or more rows: a
-rendered Before/After table), trimming the UNCHANGED lines rather than the change.
+severity, spiking any 50 before you ask me; and RENDER markdown to me rather than
+putting it in a code snippet — fences are for code, they do not reflow, and I often
+read on mobile where everything past ~45 characters is off-screen. No Before:/After:
+columns. Table rows: name the row, or render a Before/After table for two or more.
+Trim the UNCHANGED lines, never the change.
 If you are mid-lap: never start a new lap
 while any finding is undecided — the cap pauses triage, it does not finish it — the cap
 is now 12, apply per batch with its own commit, and hand off with /compact rather than a
@@ -136,6 +143,7 @@ new session.
 | §1 spike a confidence-50 finding | A suspicion arriving in the same voice as a confirmed defect | 2026-10-08 |
 | loop: /compact is the preferred handoff | "must not share a session" read as banning the compact workflow | 2026-10-08 |
 | §9 never fence table source | A changed spec row arriving as 16 lines of wrapped pipe markup | 2026-10-08 |
+| §9 markdown is rendered, never fenced | Prose in a `text` fence, unreadable on mobile — half of every line off-screen | 2026-10-10 |
 | §9 size guard counts unchanged lines | A line cap that would trim the change instead of the padding | 2026-10-08 |
 
 Both prompts work from any project — the plugin is symlinked into `~/.claude/skills`.
