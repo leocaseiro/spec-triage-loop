@@ -1,10 +1,17 @@
 {
   "name": "spec-triage-loop",
-  "description": "Make a review→verify→triage→apply→re-review loop the default review workflow, composing superpowers + compound-engineering.",
+  "description": "A standalone triage skill that puts every decision to you as a picker with the context shown first \u2014 plus two review loops that run a doc or diff until it is clean.",
   "version": "0.1.0",
-  "author": { "name": "leocaseiro" },
+  "author": {
+    "name": "leocaseiro"
+  },
   "homepage": "https://github.com/leocaseiro/spec-triage-loop",
   "repository": "https://github.com/leocaseiro/spec-triage-loop",
   "license": "MIT",
-  "keywords": ["skills", "code-review", "workflow", "triage"]
+  "keywords": [
+    "skills",
+    "code-review",
+    "workflow",
+    "triage"
+  ]
 }

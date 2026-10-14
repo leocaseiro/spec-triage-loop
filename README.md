@@ -1,21 +1,36 @@
 # spec-triage-loop
 
-One hook re-surfaces a review discipline at the start of every session; two loops review any
-document or diff **until it is clean**. It is a Claude Code plugin that makes
-`review → verify → triage → apply → re-review` the default review workflow — by composing
-existing skills (superpowers + compound-engineering) rather than re-implementing them.
+A Claude Code plugin with three skills, one of which needs nothing else installed.
+
+**`triage`** is that one. It makes every decision an agent puts to you a *picker*, with the
+context established first and **shown** — a `Before → After` or a worked example, never a bare
+description. It is not code-specific and has no dependencies.
+
+**`doc-review-loop`** and **`code-review-loop`** run a document or a diff through
+`review → verify → triage → apply → re-review` **until it is clean**. These two do compose
+existing skills rather than re-implementing them, so they need other plugins installed.
+
+A session-start hook re-surfaces the discipline each session, so it is there without you
+loading it by hand.
 
 ## Requirements
 
-Both loops compose skills from two other plugins. Install them first, or the loops fail on an
-unresolvable skill name the moment they run:
+**`triage` needs nothing** — install this plugin and it works.
+
+The two review loops resolve skills from other plugins by name, and fail the moment they run
+without them. They do not need the same ones:
+
+| Loop | Requires |
+|------|----------|
+| `doc-review-loop` | `compound-engineering` |
+| `code-review-loop` | `compound-engineering` **and** `superpowers` |
 
 ```text
-/plugin install superpowers@claude-plugins-official
 /plugin install compound-engineering@compound-engineering-plugin
+/plugin install superpowers@claude-plugins-official
 ```
 
-`triage` on its own has no dependencies.
+(`superpowers` is code-scoped verification, which is why the document loop does not use it.)
 
 ## Install
 
