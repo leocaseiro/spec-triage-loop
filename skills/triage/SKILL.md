@@ -510,8 +510,9 @@ persist a fact about the person's preferences silently.
 ## Commit before review (pointer)
 
 Before you put an artifact up for review, it must be a **committed, green checkpoint** —
-review happens on the committed diff, never the uncommitted working tree. The full rule lives
-in the review loop (`../_shared/review-loop.md`).
+review happens on the committed diff, never the uncommitted working tree, and never with
+`--no-verify`. That is the whole rule as it applies here; the two review loops carry the
+longer version, but `triage` does not depend on them and needs nothing else installed.
 
 ## Red flags — stop, you are about to break the discipline
 
