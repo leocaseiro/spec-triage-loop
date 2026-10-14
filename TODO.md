@@ -56,7 +56,7 @@ score), (3) the decisive trade-off, (4) recommendation + flip condition.
 - Maintenance budget for tracking two upstream skill families — set a ceiling.
 - Public-repo framing: lead the README with the simple "one hook makes review
   always-on" story; keep the machinery as depth.
-- Opportunity cost vs the AWS/product job-hunt focus — keep this a means, not a sink.
+- Opportunity cost — this is tooling in service of other work. Keep it a means, not a sink.
 
 ## Deferred questions for the plan stage
 

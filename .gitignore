@@ -1,2 +1,7 @@
 .DS_Store
 .spec-triage-loop/
+
+# Local tool state — not part of the plugin
+.specstory/
+.cursorindexingignore
+vectors/

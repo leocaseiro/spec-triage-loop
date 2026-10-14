@@ -74,9 +74,10 @@ scripts/picker-audit.py <project> --dump 2     # one picker in full
 ```
 
 `<project>` is a substring of a directory under `~/.claude/projects`; omit it to scan all.
-It exists because the discipline degrades silently: measured on 2026-09-19 across 89
-pickers, sessions that loaded the skill named the trade-off in 40% of pickers and sessions
-that did not in 4%, with no other visible difference.
+It exists because the discipline degrades silently. Measured 2026-10-14 across 1,128
+pickers in 126 sessions: sessions that had loaded the skill named the trade-off in 40% of
+their pickers against 8% in sessions that had not, and carried a `Before → After` in 45%
+against 4%. No other visible difference between the two groups.
 
 ## Depth
 

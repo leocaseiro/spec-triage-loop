@@ -26,6 +26,10 @@ it had no lead-in text. Group by requestId (see `turns()`).
 import argparse, collections, json, os, re, sys
 
 PROJECTS = os.path.expanduser("~/.claude/projects")
+# Claude Code mangles a project's cwd into its directory name: /Users/me/Sites/app
+# becomes -Users-me-Sites-app. Strip whatever THIS user's home maps to, so a label
+# names the project rather than the machine it happened to be measured on.
+HOME_SLUG = os.path.expanduser("~").replace("/", "-")
 
 
 def load(path):
@@ -151,7 +155,7 @@ def tally(sessions):
 
 
 def short(wt):
-    return wt.replace("-Users-leocaseiro-Sites-", "").replace("--claude-worktrees-", "/")[-30:]
+    return wt.replace(HOME_SLUG, "").replace("--claude-worktrees-", "/").lstrip("-")[-30:]
 
 
 def main():
