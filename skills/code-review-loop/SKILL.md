@@ -18,7 +18,7 @@ invocation will and will not do.
 
 ## The procedure
 
-Read `../_shared/review-loop.md` (the shared loop shape) and run it with these five
+Read `review-loop.md` (the shared loop shape, beside this file) and run it with these five
 parameters bound. Apply its **context guardrail** first: every lap is two invocations
 (review half → findings artifact → triage half), and its entry rule decides which half
 this invocation is.
@@ -66,12 +66,14 @@ superpowers' existing mechanism.
 ## Notes
 
 - The re-lap trigger, the lap decision, and the lap-cap / no-progress bound all live in
-  `../_shared/review-loop.md`. Code carries no frontmatter of its own, which is why
+  `review-loop.md`, beside this file. Code carries no frontmatter of its own, which is why
   STATE-STORE is bound above rather than assumed (spec §7).
 - Because `mode:agent` never mutates the tree, a re-review always runs against exactly what
   you applied — never against something the reviewer silently changed underneath you.
 - `triage` (step 4 of the shared loop) walks the surviving findings past the person as
-  chunks-then-picker. **Load it now** — `Skill("spec-triage-loop:triage")` — before the first
-  picker. The SessionStart hook's summary is NOT the skill: the depth rules (§7 pros/cons,
+  chunks-then-picker. **Load it now**, before the first picker:
+  `Skill("spec-triage-loop:triage")` — or `Skill("triage")` if these skills came from the
+  `skills` CLI rather than the plugin, where there is no `spec-triage-loop:` namespace.
+  The SessionStart hook's summary is NOT the skill: the depth rules (§7 pros/cons,
   §9 Before → After, the trade-off line, the recommendation) exist only in the skill file, so
   a loop that skips the load ships options with no reasoning attached.

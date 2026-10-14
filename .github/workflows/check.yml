@@ -1,0 +1,37 @@
+name: check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Each review loop ships a generated copy of skills/_shared/review-loop.md,
+      # because `npx skills add` installs skill folders only and _shared/ is not
+      # one. A copy that drifts from the source is a loop running yesterday's
+      # rules with no symptom until it misbehaves -- so fail the build on drift.
+      - name: shared loop copies are in sync
+        run: ./scripts/sync-shared.py --check
+
+      - name: plugin manifests parse
+        run: |
+          python3 -c "import json; json.load(open('.claude-plugin/plugin.json'))"
+          python3 -c "import json; json.load(open('.claude-plugin/marketplace.json'))"
+
+      - name: every skill has name + description frontmatter
+        run: |
+          for f in skills/*/SKILL.md; do
+            head -5 "$f" | grep -q '^name:'        || { echo "$f: no name:"; exit 1; }
+            head -5 "$f" | grep -q '^description:' || { echo "$f: no description:"; exit 1; }
+            echo "  ok  $f"
+          done
+
+      - name: session-start hook is executable and runs
+        run: |
+          test -x hooks/session-start || { echo "hook not executable"; exit 1; }
+          CLAUDE_PLUGIN_ROOT="$PWD" ./hooks/session-start > /dev/null

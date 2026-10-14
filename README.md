@@ -13,28 +13,27 @@ existing skills rather than re-implementing them, so they need other plugins ins
 A session-start hook re-surfaces the discipline each session, so it is there without you
 loading it by hand.
 
-## Requirements
+## The three skills, and what each needs
 
-**`triage` needs nothing** — install this plugin and it works.
+| Skill | What it does | Requires |
+|-------|--------------|----------|
+| **`triage`** | Turns every decision into a picker with the context shown first | **nothing** |
+| **`doc-review-loop`** | Reviews a doc until clean | `compound-engineering` |
+| **`code-review-loop`** | Reviews a diff until clean | `compound-engineering` **and** `superpowers` |
 
-The two review loops resolve skills from other plugins by name, and fail the moment they run
-without them. They do not need the same ones:
-
-| Loop | Requires |
-|------|----------|
-| `doc-review-loop` | `compound-engineering` |
-| `code-review-loop` | `compound-engineering` **and** `superpowers` |
+The two loops resolve those skills by name and fail the moment they run without them:
 
 ```text
 /plugin install compound-engineering@compound-engineering-plugin
 /plugin install superpowers@claude-plugins-official
 ```
 
-(`superpowers` is code-scoped verification, which is why the document loop does not use it.)
+(`superpowers` supplies code-scoped verification, which is why the document loop does not
+use it.)
 
 ## Install
 
-From any machine with Claude Code:
+**As a plugin** — the full thing, including the session-start hook:
 
 ```text
 /plugin marketplace add leocaseiro/spec-triage-loop
@@ -42,6 +41,25 @@ From any machine with Claude Code:
 ```
 
 It installs at user scope, so it is available in every project with no per-project setup.
+
+**With the [skills CLI](https://skills.sh)** — skills only, no hook:
+
+```bash
+npx skills add leocaseiro/spec-triage-loop                       # pick interactively
+npx skills add leocaseiro/spec-triage-loop --skill triage -g     # just the standalone one
+```
+
+Two differences worth knowing before you choose:
+
+- **No session-start hook.** The hook is a plugin feature. Installed as skills, nothing
+  re-surfaces the discipline each session — you load `triage` yourself, or your agent does
+  when its description matches.
+- **The loops still need the two plugins above,** because `compound-engineering:ce-doc-review`
+  is a plugin-qualified name that the skills CLI cannot install. Each loop also says to load
+  `triage` as `Skill("triage")` when there is no `spec-triage-loop:` namespace.
+
+`triage` has no such caveats: it is self-contained, references no other file, and behaves
+identically whichever way you install it.
 
 ## What you get
 
@@ -70,10 +88,16 @@ by hand.
 
 The loops do not re-implement review or model-tiering — they **compose** two existing skill
 families through the Skill tool by plugin-qualified name (`compound-engineering:…`,
-`superpowers:…`). The loop shape lives once in `skills/_shared/review-loop.md`; each loop
-skill only binds its five parameters — which review skill, which mode, the exit signal, the
-verify check, and where loop state is stored. The bound is real: the loop halts at a lap cap,
-or when a lap makes no progress, so "until clean" is never open-ended.
+`superpowers:…`). The loop shape is written once in `skills/_shared/review-loop.md`; each
+loop skill only binds its five parameters — which review skill, which mode, the exit signal,
+the verify check, and where loop state is stored. The bound is real: the loop halts at a lap
+cap, or when a lap makes no progress, so "until clean" is never open-ended.
+
+Each loop folder also carries a **generated copy** of that file, because `npx skills add`
+installs skill folders only and `skills/_shared/` is not one — a loop installed that way
+would otherwise lose the file its first instruction tells it to read, with no error at
+install time. `scripts/sync-shared.py` writes the copies and `--check` fails CI if they
+drift. Edit the source, never a copy.
 
 ## Measuring whether it lands
 
