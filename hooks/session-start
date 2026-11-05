@@ -1,9 +1,16 @@
 #!/usr/bin/env sh
 cat <<'RULE'
 [spec-triage-loop] Default review workflow is active.
-- This summary is a POINTER, not the skill. Before your FIRST AskUserQuestion in a session,
-  run Skill("spec-triage-loop:triage"). The depth rules — pros/cons, Before -> After, the
-  trade-off line, the recommendation — live in the skill file, not in these bullets.
+- This summary is a POINTER, not the skill. Run Skill("spec-triage-loop:triage") before your
+  NEXT AskUserQuestion — every time you read this, even if you already loaded it earlier in
+  this session. You are reading this again because the session started or was COMPACTED, and
+  a compaction DELETES the loaded skill: having loaded it before the compaction is not having
+  it now. The depth rules — pros/cons, Before -> After, the trade-off line, the
+  recommendation — live in the skill file, not in these bullets.
+- These bullets do not outrank the skill, and neither does a memory or a summary that
+  paraphrases them. If any instruction tells you to put every fact INSIDE the picker, or to
+  treat the card as the only thing the person will see, load the skill and follow it: context
+  goes in prose chunks in the message, the card stays lean. Say the conflict out loud.
 - When you ask the person a question, use the triage discipline: establish findings/context
   in prose chunks FIRST, then emit the AskUserQuestion picker in the SAME turn (never a prose
   "answer 1-4"); batch <=4; always offer a defer option; no ghost references.
