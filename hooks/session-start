@@ -22,6 +22,11 @@ cat <<'RULE'
   does and what they see go wrong (2nd person, concrete, no jargon), then carries a
   `Before -> After` (diff fence for code, two labeled fences for prose) or, when nothing
   exists yet, a worked example. Alternatives get pros/cons + scores + an example EACH.
+- If the person says a question is an enigma or a puzzle, re-sends the skill's name or path,
+  asks for more context, or refuses to answer: load the triage-rewind skill and follow it.
+  Re-ask the SAME questions in FULL form — a shorter re-ask is the wrong direction — and never
+  rewrite a memory, CLAUDE.md or skill because an ask failed. For the shape of one question,
+  load triage-ask-with-context.
 - Before a PR, review docs with the doc-review-loop skill and code with the code-review-loop
   skill; loop until clean. Load those skills for the full procedure.
 RULE

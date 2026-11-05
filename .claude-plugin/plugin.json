@@ -1,6 +1,6 @@
 {
   "name": "spec-triage-loop",
-  "description": "A standalone triage skill that puts every decision to you as a picker with the context shown first \u2014 plus two review loops that run a doc or diff until it is clean.",
+  "description": "Three standalone skills that put every decision to you as a picker with the context shown first \u2014 the triage discipline, the shape of one well-asked question, and a rewind for when an agent has stopped following either \u2014 plus two review loops that run a doc or diff until it is clean.",
   "version": "0.1.0",
   "author": {
     "name": "leocaseiro"

@@ -1,10 +1,15 @@
 # spec-triage-loop
 
-A Claude Code plugin with three skills, one of which needs nothing else installed.
+A Claude Code plugin with five skills, three of which need nothing else installed.
 
-**`triage`** is that one. It makes every decision an agent puts to you a *picker*, with the
+**`triage`** is the main one. It makes every decision an agent puts to you a *picker*, with the
 context established first and **shown** — a `Before → After` or a worked example, never a bare
 description. It is not code-specific and has no dependencies.
+
+**`triage-ask-with-context`** and **`triage-rewind`** are its two companions, and they also
+need nothing installed. The first is the shape of a well-asked question — context in the
+message, decision in the card. The second is what you trigger when an agent has stopped
+following any of it and the questions have turned into puzzles.
 
 **`doc-review-loop`** and **`code-review-loop`** run a document or a diff through
 `review → verify → triage → apply → re-review` **until it is clean**. These two do compose
@@ -13,11 +18,13 @@ existing skills rather than re-implementing them, so they need other plugins ins
 A session-start hook re-surfaces the discipline each session, so it is there without you
 loading it by hand.
 
-## The three skills, and what each needs
+## The five skills, and what each needs
 
 | Skill | What it does | Requires |
 |-------|--------------|----------|
 | **`triage`** | Turns every decision into a picker with the context shown first | **nothing** |
+| **`triage-ask-with-context`** | The shape of one well-asked question: context in the message, decision in the card | **nothing** |
+| **`triage-rewind`** | Recovers a refused question — reload, re-ask in full, change no instruction file | **nothing** |
 | **`doc-review-loop`** | Reviews a doc until clean | `compound-engineering` |
 | **`code-review-loop`** | Reviews a diff until clean | `compound-engineering` **and** `superpowers` |
 
@@ -63,12 +70,22 @@ identically whichever way you install it.
 
 ## What you get
 
-Three skills plus a session-start hook.
+Five skills plus a session-start hook.
 
 - **`triage`** — the asking discipline. Every decision is put to you as a picker with the
   context established first, never a prose "answer 1-4" — and the context is *shown*: each
   finding and each option carries a `Before → After` or a worked example, never a bare
   description. Governs review walk-throughs and any multi-option question.
+- **`triage-ask-with-context`** — one question's shape, as a contract: scenario, the current
+  text quoted, `Before → After`, pros and cons for every option, the trade-off, the
+  recommendation — in the message — then a lean card in the same turn. It also replaces the
+  "can the card alone be answered?" test, which sounds reasonable and is what drives agents to
+  pour a scenario into a four-line overlay.
+- **`triage-rewind`** — trigger this when the questions have become puzzles and the agent
+  insists it is following the rules. It reloads `triage` unconditionally (a compaction deletes
+  the loaded copy, and an agent cannot tell from the inside), re-asks the *same* questions in
+  full rather than shrinking them further, and forbids the thing that makes the damage
+  permanent: rewriting a memory or instruction file to excuse the failed ask.
 - **`doc-review-loop`** — review any document (spec, plan, design, RFC) until clean. Wraps
   `compound-engineering:ce-doc-review` in headless mode, verifies each finding, triages it
   with you, applies your decisions, and re-reviews until nothing actionable remains.
